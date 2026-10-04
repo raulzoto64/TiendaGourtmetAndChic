@@ -207,10 +207,19 @@ function scrollTop() {
   setTimeout(() => scrollTo({ top: 0, behavior: "auto" }), 60);
 }
 
-function goHome() {
+function goHome(resetScroll = true) {
   history.pushState({}, "", "/");
   dispatchEvent(new PopStateEvent("popstate"));
-  scrollTop();
+  if (resetScroll) scrollTop();
+}
+
+function goToSection(selector: string) {
+  goHome(false);
+  setTimeout(() => {
+    const target = document.querySelector(selector);
+    if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+    else scrollTop();
+  }, 90);
 }
 
 function Header({ onContact }: { onContact: () => void }) {
@@ -222,9 +231,9 @@ function Header({ onContact }: { onContact: () => void }) {
         <Logo />
         <nav className={open ? "nav nav--open" : "nav"}>
           <button onClick={() => { goHome(); setOpen(false); }}>Tienda</button>
-          <button onClick={() => { goHome(); setTimeout(() => document.querySelector("#trufas")?.scrollIntoView({ behavior: "smooth" }), 50); setOpen(false); }}>Trufa fresca</button>
-          <button onClick={() => { goHome(); setTimeout(() => document.querySelector("#profesionales")?.scrollIntoView({ behavior: "smooth" }), 50); setOpen(false); }}>Profesionales</button>
-          <button onClick={() => { goHome(); setTimeout(() => document.querySelector("#origen")?.scrollIntoView({ behavior: "smooth" }), 50); setOpen(false); }}>Nuestro origen</button>
+          <button onClick={() => { goToSection("#trufas"); setOpen(false); }}>Trufa fresca</button>
+          <button onClick={() => { goToSection("#profesionales"); setOpen(false); }}>Profesionales</button>
+          <button onClick={() => { goToSection("#origen"); setOpen(false); }}>Nuestro origen</button>
         </nav>
         <div className="header__actions">
           <button className="cart-button" onClick={onContact} aria-label="Contactar para hacer pedido">
@@ -377,7 +386,7 @@ function ProductDetail({ product, onSelect, onQuote }: { product: Product; onSel
   const total = format.price * pack * quantity * (pack >= 12 ? 0.86 : pack >= 6 ? 0.93 : 1);
   return (
     <main className="detail">
-      <div className="breadcrumbs"><button onClick={goHome}>Tienda</button><span>/</span><span>{product.name}</span></div>
+      <div className="breadcrumbs"><button onClick={() => goHome()}>Tienda</button><span>/</span><span>{product.name}</span></div>
       <section className="detail__top">
         <div className="detail__gallery">
           {product.badge && <span className="badge">{product.badge}</span>}
@@ -482,7 +491,7 @@ function QuoteModal({ open, onClose, items }: { open: boolean; onClose: () => vo
 
 function Footer() {
   return <footer className="footer">
-    <div className="footer__main"><Logo inverse /><div><p>Explorar</p><button onClick={goHome}>Tienda</button><a href="#trufas">Trufa fresca</a><a href="#profesionales">Profesionales</a></div><div><p>Contacto</p><a href="mailto:pedidos@gourmetandchic.es">pedidos@gourmetandchic.es</a><a href="tel:+34670414347">+34 670 414 347</a><span>Zaragoza · España</span></div><div className="footer__claim"><p>Artesanos y sostenibles</p><strong>Pequeños lotes.<br />Grandes historias.</strong></div></div>
+    <div className="footer__main"><Logo inverse /><div><p>Explorar</p><button onClick={() => goHome()}>Tienda</button><button onClick={() => goToSection("#trufas")}>Trufa fresca</button><button onClick={() => goToSection("#profesionales")}>Profesionales</button></div><div><p>Contacto</p><a href="mailto:pedidos@gourmetandchic.es">pedidos@gourmetandchic.es</a><a href="tel:+34670414347">+34 670 414 347</a><span>Zaragoza · España</span></div><div className="footer__claim"><p>Artesanos y sostenibles</p><strong>Pequeños lotes.<br />Grandes historias.</strong></div></div>
     <div className="footer__bottom"><span>© 2026 Gourmet & Chic</span><span>Aviso legal · Privacidad · Cookies</span><span>Made with care in Aragón</span></div>
   </footer>;
 }
