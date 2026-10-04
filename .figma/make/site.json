@@ -1,0 +1,10 @@
+{
+  "description": "This virtual store offers fresh truffles and artisan truffle products for chefs and gourmet shops, emphasizing quality, sustainability, and unique culinary experiences.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
