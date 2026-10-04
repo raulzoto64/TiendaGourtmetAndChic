@@ -230,7 +230,7 @@ function Header({ onContact }: { onContact: () => void }) {
       <header className="header">
         <Logo />
         <nav className={open ? "nav nav--open" : "nav"}>
-          <button onClick={() => { goHome(); setOpen(false); }}>Tienda</button>
+          <button onClick={() => { goToSection("#productos"); setOpen(false); }}>Tienda</button>
           <button onClick={() => { goToSection("#trufas"); setOpen(false); }}>Trufa fresca</button>
           <button onClick={() => { goToSection("#profesionales"); setOpen(false); }}>Profesionales</button>
           <button onClick={() => { goToSection("#origen"); setOpen(false); }}>Nuestro origen</button>
@@ -386,7 +386,7 @@ function ProductDetail({ product, onSelect, onQuote }: { product: Product; onSel
   const total = format.price * pack * quantity * (pack >= 12 ? 0.86 : pack >= 6 ? 0.93 : 1);
   return (
     <main className="detail">
-      <div className="breadcrumbs"><button onClick={() => goHome()}>Tienda</button><span>/</span><span>{product.name}</span></div>
+      <div className="breadcrumbs"><button onClick={() => goToSection("#productos")}>Tienda</button><span>/</span><span>{product.name}</span></div>
       <section className="detail__top">
         <div className="detail__gallery">
           {product.badge && <span className="badge">{product.badge}</span>}
@@ -491,7 +491,7 @@ function QuoteModal({ open, onClose, items }: { open: boolean; onClose: () => vo
 
 function Footer() {
   return <footer className="footer">
-    <div className="footer__main"><Logo inverse /><div><p>Explorar</p><button onClick={() => goHome()}>Tienda</button><button onClick={() => goToSection("#trufas")}>Trufa fresca</button><button onClick={() => goToSection("#profesionales")}>Profesionales</button></div><div><p>Contacto</p><a href="mailto:pedidos@gourmetandchic.es">pedidos@gourmetandchic.es</a><a href="tel:+34670414347">+34 670 414 347</a><span>Zaragoza · España</span></div><div className="footer__claim"><p>Artesanos y sostenibles</p><strong>Pequeños lotes.<br />Grandes historias.</strong></div></div>
+    <div className="footer__main"><Logo inverse /><div><p>Explorar</p><button onClick={() => goToSection("#productos")}>Tienda</button><button onClick={() => goToSection("#trufas")}>Trufa fresca</button><button onClick={() => goToSection("#profesionales")}>Profesionales</button></div><div><p>Contacto</p><a href="mailto:pedidos@gourmetandchic.es">pedidos@gourmetandchic.es</a><a href="tel:+34670414347">+34 670 414 347</a><span>Zaragoza · España</span></div><div className="footer__claim"><p>Artesanos y sostenibles</p><strong>Pequeños lotes.<br />Grandes historias.</strong></div></div>
     <div className="footer__bottom"><span>© 2026 Gourmet & Chic</span><span>Aviso legal · Privacidad · Cookies</span><span>Made with care in Aragón</span></div>
   </footer>;
 }
