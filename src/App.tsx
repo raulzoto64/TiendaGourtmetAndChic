@@ -281,7 +281,7 @@ function Home({ onSelect, onQuote }: { onSelect: (product: Product) => void; onQ
           <p className="hero__lead">Trufas frescas y elaborados artesanos, naturales y sin conservantes para chefs, tiendas gourmet y amantes de lo excepcional.</p>
           <div className="hero__buttons">
             <button className="button button--red" onClick={() => document.querySelector("#productos")?.scrollIntoView({ behavior: "smooth" })}>Descubrir la selección <Icon name="arrow" /></button>
-            <button className="button button--ghost" onClick={onQuote}>Soy profesional</button>
+            <button className="button button--ghost" onClick={onQuote}>Soy chef</button>
           </div>
         </div>
         <div className="hero__trust">
