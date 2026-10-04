@@ -27,9 +27,9 @@ img { display: block; width: 100%; }
 svg { width: 1.25rem; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 
 .announcement { background: var(--ink); color: #ddd4cc; text-align: center; padding: .55rem 1rem; font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; }
-.header { height: 5rem; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(1.2rem, 5vw, 5rem); background: var(--paper); border-bottom: 1px solid var(--line); position: relative; z-index: 30; }
+.header { height: 5.6rem; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(1.2rem, 5vw, 5rem); background: var(--paper); border-bottom: 1px solid var(--line); position: relative; z-index: 30; }
 .logo { background: none; display: flex; align-items: center; text-align: left; padding: 0; }
-.logo img { width: 10.5rem; height: 3.6rem; object-fit: contain; object-position: left center; }
+.logo img { width: 13rem; height: 4.6rem; object-fit: contain; object-position: left center; }
 .nav { display: flex; align-items: center; gap: 2.2rem; }
 .nav button { background: none; padding: 1.9rem 0; font-size: .78rem; font-weight: 600; }
 .nav button:hover { color: var(--red); }
@@ -220,6 +220,7 @@ h1, h2, h3 { font-family: "Barlow Condensed"; text-transform: uppercase; margin:
 
 .footer { background: #161313; color: white; padding: 5rem clamp(1.5rem, 7vw, 7rem) 1.5rem; }
 .footer__main { display: grid; grid-template-columns: 1.5fr 1fr 1.2fr 1.3fr; gap: 3rem; padding-bottom: 5rem; }
+.footer .logo img { width: 15rem; height: 5.2rem; }
 .footer__main > div:not(.footer__claim) { display: flex; flex-direction: column; gap: .65rem; }
 .footer__main p { color: var(--gold); text-transform: uppercase; letter-spacing: .14em; font-size: .65rem; font-weight: 700; }
 .footer__main a, .footer__main button, .footer__main span { background: transparent; padding: 0; text-align: left; color: #afa7a3; text-decoration: none; font-size: .75rem; }
@@ -247,8 +248,9 @@ h1, h2, h3 { font-family: "Barlow Condensed"; text-transform: uppercase; margin:
 
 @media (max-width: 600px) {
   .announcement { font-size: .55rem; }
-  .header { height: 4.4rem; padding: 0 1rem; }
-  .logo img { width: 8.5rem; }
+  .header { height: 5rem; padding: 0 1rem; }
+  .logo img { width: 10.5rem; height: 4rem; }
+  .footer .logo img { width: 13rem; height: 4.6rem; }
   .hero { min-height: 46rem; }
   .hero__media img { object-position: 62% center; }
   .hero__shade { background: linear-gradient(90deg, rgba(25,20,20,.9), rgba(25,20,20,.3)), linear-gradient(0deg, rgba(25,20,20,.85), transparent); }

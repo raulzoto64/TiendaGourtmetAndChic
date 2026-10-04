@@ -202,13 +202,18 @@ function Logo({ inverse = false }: { inverse?: boolean }) {
   );
 }
 
+function scrollTop() {
+  scrollTo({ top: 0, behavior: "auto" });
+  setTimeout(() => scrollTo({ top: 0, behavior: "auto" }), 60);
+}
+
 function goHome() {
   history.pushState({}, "", "/");
   dispatchEvent(new PopStateEvent("popstate"));
-  scrollTo({ top: 0, behavior: "smooth" });
+  scrollTop();
 }
 
-function Header({ count, onCart }: { count: number; onCart: () => void }) {
+function Header({ onContact }: { onContact: () => void }) {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -222,8 +227,8 @@ function Header({ count, onCart }: { count: number; onCart: () => void }) {
           <button onClick={() => { goHome(); setTimeout(() => document.querySelector("#origen")?.scrollIntoView({ behavior: "smooth" }), 50); setOpen(false); }}>Nuestro origen</button>
         </nav>
         <div className="header__actions">
-          <button className="cart-button" onClick={onCart} aria-label="Abrir carrito">
-            <Icon name="bag" /><span>Pedido</span>{count > 0 && <i>{count}</i>}
+          <button className="cart-button" onClick={onContact} aria-label="Contactar para hacer pedido">
+            <Icon name="bag" /><span>Pedido</span>
           </button>
           <button className="menu-button" onClick={() => setOpen(!open)} aria-label="Menú">
             <Icon name={open ? "close" : "menu"} />
@@ -234,11 +239,11 @@ function Header({ count, onCart }: { count: number; onCart: () => void }) {
   );
 }
 
-function ProductCard({ product, onAdd }: { product: Product; onAdd: (product: Product) => void }) {
+function ProductCard({ product, onSelect }: { product: Product; onSelect: (product: Product) => void }) {
   const open = () => {
     history.pushState({}, "", `/producto/${product.id}`);
     dispatchEvent(new PopStateEvent("popstate"));
-    scrollTo({ top: 0 });
+    scrollTop();
   };
   return (
     <article className="product-card">
@@ -253,7 +258,7 @@ function ProductCard({ product, onAdd }: { product: Product; onAdd: (product: Pr
         <span>{product.short}</span>
         <div className="product-card__footer">
           <strong>{product.quoteOnly ? "Consultar disponibilidad" : `Desde ${formatPrice(product.formats[0].price)}`}</strong>
-          <button className="round-button" onClick={() => product.quoteOnly ? open() : onAdd(product)} aria-label={`Ver ${product.name}`}>
+          <button className="round-button" onClick={() => product.quoteOnly ? open() : onSelect(product)} aria-label={`Contactar por ${product.name}`}>
             {product.quoteOnly ? "→" : "+"}
           </button>
         </div>
@@ -262,7 +267,7 @@ function ProductCard({ product, onAdd }: { product: Product; onAdd: (product: Pr
   );
 }
 
-function Home({ onAdd, onQuote }: { onAdd: (product: Product) => void; onQuote: () => void }) {
+function Home({ onSelect, onQuote }: { onSelect: (product: Product) => void; onQuote: () => void }) {
   const [filter, setFilter] = useState("Todos");
   const shown = filter === "Todos" ? products : products.filter((p) => p.category === filter);
   return (
@@ -308,7 +313,7 @@ function Home({ onAdd, onQuote }: { onAdd: (product: Product) => void; onQuote: 
           ))}
         </div>
         <div className="product-grid">
-          {shown.map((product) => <ProductCard product={product} onAdd={onAdd} key={product.id} />)}
+          {shown.map((product) => <ProductCard product={product} onSelect={onSelect} key={product.id} />)}
         </div>
       </section>
 
@@ -355,7 +360,7 @@ function Home({ onAdd, onQuote }: { onAdd: (product: Product) => void; onQuote: 
   );
 }
 
-function ProductDetail({ product, onAdd, onQuote }: { product: Product; onAdd: (p: Product, quantity: number, format: Format, pack: number) => void; onQuote: () => void }) {
+function ProductDetail({ product, onSelect, onQuote }: { product: Product; onSelect: (p: Product, quantity: number, format: Format, pack: number) => void; onQuote: () => void }) {
   const [format, setFormat] = useState(product.formats[0]);
   const [pack, setPack] = useState(1);
   const [quantity, setQuantity] = useState(1);
@@ -413,13 +418,13 @@ function ProductDetail({ product, onAdd, onQuote }: { product: Product; onAdd: (
           ) : (
             <div className="purchase-row">
               <div className="quantity"><button onClick={() => setQuantity(Math.max(1, quantity - 1))}>−</button><span>{quantity}</span><button onClick={() => setQuantity(quantity + 1)}>+</button></div>
-              <button className="button button--red purchase-button" onClick={() => onAdd(product, quantity, format, pack)}>Añadir · {formatPrice(total)}</button>
+              <button className="button button--red purchase-button" onClick={() => onSelect(product, quantity, format, pack)}>Contactar para hacer pedido <Icon name="arrow" /></button>
             </div>
           )}
           <button className="quote-link" onClick={onQuote}>
             {product.quoteOnly ? "Recibe una propuesta para compra por unidad o cajas" : "¿Necesitas más de 12 cajas? Solicita una cotización personalizada"} <Icon name="arrow" />
           </button>
-          <p className="vat">{product.quoteOnly ? "Precio según campaña y volumen" : `Precio sin IVA (${format.vat})`} · Plazo habitual 24/48h</p>
+          <p className="vat">{product.quoteOnly ? "Precio según campaña y volumen" : `Total estimado ${formatPrice(total)} sin IVA (${format.vat})`} · Plazo habitual 24/48h</p>
           <div className="detail__benefits">
             <span><b>Origen garantizado</b><small>Aragón, España</small></span>
             <span><b>Envío seguro</b><small>Embalaje profesional</small></span>
@@ -440,29 +445,15 @@ function ProductDetail({ product, onAdd, onQuote }: { product: Product; onAdd: (
       )}
       <section className="related section">
         <div className="section-head"><div><p className="eyebrow">También te puede interesar</p><h2>Completa tu selección</h2></div></div>
-        <div className="product-grid product-grid--three">{products.filter((p) => p.id !== product.id).slice(0, 3).map((p) => <ProductCard product={p} onAdd={(item) => onAdd(item, 1, item.formats[0], 1)} key={p.id} />)}</div>
+        <div className="product-grid product-grid--three">{products.filter((p) => p.id !== product.id).slice(0, 3).map((p) => <ProductCard product={p} onSelect={(item) => onSelect(item, 1, item.formats[0], 1)} key={p.id} />)}</div>
       </section>
     </main>
   );
 }
 
-type CartItem = { product: Product; quantity: number; format: Format; pack: number };
+type OrderItem = { product: Product; quantity: number; format: Format; pack: number };
 
-function Drawer({ open, items, onClose, onQuote }: { open: boolean; items: CartItem[]; onClose: () => void; onQuote: () => void }) {
-  const total = items.reduce((sum, item) => sum + item.format.price * item.quantity * item.pack, 0);
-  return (
-    <><div className={`overlay ${open ? "visible" : ""}`} onClick={onClose} /><aside className={`drawer ${open ? "drawer--open" : ""}`}>
-      <div className="drawer__head"><div><p className="eyebrow">Tu selección</p><h2>Pedido</h2></div><button onClick={onClose}><Icon name="close" /></button></div>
-      <div className="drawer__items">
-        {items.length === 0 ? <div className="empty"><Icon name="bag" /><h3>Tu pedido está vacío</h3><p>Descubre nuestra selección artesanal.</p></div> :
-          items.map((item, i) => <article key={`${item.product.id}-${i}`}><img src={item.product.image} alt="" /><div><b>{item.product.name}</b><small>{item.format.label} · {item.pack === 1 ? "Unidad" : `Caja de ${item.pack}`}</small><span>{item.quantity} × {formatPrice(item.format.price * item.pack)}</span></div></article>)}
-      </div>
-      {items.length > 0 && <div className="drawer__footer"><p><span>Subtotal sin IVA</span><b>{formatPrice(total)}</b></p><button className="button button--red" onClick={onQuote}>Contactar para hacer pedido <Icon name="arrow" /></button><small>Confirmaremos disponibilidad, portes e IVA antes del pago.</small></div>}
-    </aside></>
-  );
-}
-
-function QuoteModal({ open, onClose, items }: { open: boolean; onClose: () => void; items: CartItem[] }) {
+function QuoteModal({ open, onClose, items }: { open: boolean; onClose: () => void; items: OrderItem[] }) {
   const [sent, setSent] = useState(false);
   const total = items.reduce((sum, item) => sum + item.format.price * item.quantity * item.pack, 0);
   useEffect(() => {
@@ -498,26 +489,27 @@ function Footer() {
 
 export default function App() {
   const [path, setPath] = useState(location.pathname);
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [drawer, setDrawer] = useState(false);
+  const [order, setOrder] = useState<OrderItem[]>([]);
   const [quote, setQuote] = useState(false);
   useEffect(() => {
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
     const update = () => setPath(location.pathname);
     addEventListener("popstate", update);
     return () => removeEventListener("popstate", update);
   }, []);
   const product = useMemo(() => products.find((p) => path.endsWith(p.id)), [path]);
-  const add = (item: Product, quantity = 1, format = item.formats[0], pack = 1) => {
-    setCart((current) => [...current, { product: item, quantity, format, pack }]);
-    setDrawer(true);
+  const select = (item: Product, quantity = 1, format = item.formats[0], pack = 1) => {
+    setOrder([{ product: item, quantity, format, pack }]);
+    setQuote(true);
   };
   return (
     <>
-      <Header count={cart.length} onCart={() => setDrawer(true)} />
-      {product ? <ProductDetail product={product} onAdd={add} onQuote={() => setQuote(true)} /> : <Home onAdd={(p) => add(p)} onQuote={() => setQuote(true)} />}
+      <Header onContact={() => setQuote(true)} />
+      {product
+        ? <ProductDetail product={product} onSelect={select} onQuote={() => setQuote(true)} />
+        : <Home onSelect={(p) => select(p)} onQuote={() => setQuote(true)} />}
       <Footer />
-      <Drawer open={drawer} items={cart} onClose={() => setDrawer(false)} onQuote={() => { setDrawer(false); setQuote(true); }} />
-      <QuoteModal open={quote} onClose={() => setQuote(false)} items={cart} />
+      <QuoteModal open={quote} onClose={() => setQuote(false)} items={order} />
     </>
   );
 }
