@@ -145,7 +145,6 @@ h1, h2, h3 { font-family: "Barlow Condensed"; text-transform: uppercase; margin:
 .option-group { margin-top: 1.8rem; }
 .option-group > label { display: block; font-size: .69rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: .7rem; }
 .option-row, .pack-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: .45rem; }
-.pack-row { grid-template-columns: repeat(2, 1fr); }
 .option-row button, .pack-row button { min-height: 4rem; text-align: left; background: transparent; border: 1px solid var(--line); padding: .75rem; }
 .option-row button.active, .pack-row button.active { border: 2px solid var(--red); background: #fff8f7; }
 .option-row span, .option-row b, .pack-row b, .pack-row small { display: block; }
@@ -284,8 +283,7 @@ h1, h2, h3 { font-family: "Barlow Condensed"; text-transform: uppercase; margin:
   .gallery-note { display: none; }
   .detail__purchase { padding: 3rem 1.25rem; }
   .detail__purchase h1 { font-size: clamp(2.4rem, 11vw, 3rem); }
-  .option-row { grid-template-columns: 1fr; }
-  .pack-row { grid-template-columns: repeat(2, 1fr); }
+  .option-row, .pack-row { grid-template-columns: 1fr; }
   .purchase-row { grid-template-columns: 1fr; }
   .quantity { height: 3rem; }
   .detail__benefits { grid-template-columns: 1fr; }

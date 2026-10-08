@@ -183,6 +183,11 @@ const products: Product[] = [
 const formatPrice = (value: number) =>
   new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR" }).format(value);
 
+const PACKS = [6, 12, 24];
+const boxDiscount = (units: number) => (units >= 12 ? 0.86 : 0.93);
+const boxCost = (unitPrice: number, units: number) => unitPrice * units * boxDiscount(units);
+const boxLabel = (units: number) => (units === 6 ? "−7% profesional" : "−14% mayorista");
+
 function Icon({ name }: { name: "bag" | "arrow" | "menu" | "close" | "check" }) {
   const paths = {
     bag: <><path d="M6 8h12l1 12H5L6 8Z" /><path d="M9 9V6a3 3 0 0 1 6 0v3" /></>,
@@ -267,7 +272,7 @@ function ProductCard({ product, onSelect }: { product: Product; onSelect: (produ
         <button className="product-title" onClick={open}>{product.name}</button>
         <span>{product.short}</span>
         <div className="product-card__footer">
-          <strong>{product.quoteOnly ? "Consultar disponibilidad" : <>{product.formats[0].was && <del>{formatPrice(product.formats[0].was * 6 * 0.93)}</del>}Caja de 6 · {formatPrice(product.formats[0].price * 6 * 0.93)}</>}</strong>
+          <strong>{product.quoteOnly ? "Consultar disponibilidad" : <>{product.formats[0].was && <del>{formatPrice(boxCost(product.formats[0].was, 6))}</del>}Cajas de 6 a 24 · desde {formatPrice(boxCost(product.formats[0].price, 6))}</>}</strong>
           <button className="round-button" onClick={() => product.quoteOnly ? open() : onSelect(product)} aria-label={`Contactar por ${product.name}`}>
             {product.quoteOnly ? "→" : "+"}
           </button>
@@ -383,8 +388,7 @@ function ProductDetail({ product, onSelect, onQuote }: { product: Product; onSel
     setActiveImage(product.image);
   }, [product]);
   const unitPrice = product.formats[0].price;
-  const boxCost = (units: number) => unitPrice * units * (units === 12 ? 0.86 : 0.93);
-  const total = boxCost(pack) * quantity;
+  const total = boxCost(unitPrice, pack) * quantity;
   return (
     <main className="detail">
       <div className="breadcrumbs"><button onClick={() => goToSection("#productos")}>Tienda</button><span>/</span><span>{product.name}</span></div>
@@ -415,7 +419,7 @@ function ProductDetail({ product, onSelect, onQuote }: { product: Product; onSel
           <div className="option-group">
             <label>Cajas</label>
             <div className="pack-row">
-              {[6, 12].map((n) => <button className={pack === n ? "active" : ""} onClick={() => setPack(n)} key={n}><b>{`Caja de ${n}`}</b><small>{n === 6 ? "−7% profesional" : "−14% mayorista"}{!product.quoteOnly && <> · {formatPrice(boxCost(n))}</>}</small></button>)}
+              {PACKS.map((n) => <button className={pack === n ? "active" : ""} onClick={() => setPack(n)} key={n}><b>{`Caja de ${n}`}</b><small>{boxLabel(n)}{!product.quoteOnly && <> · {formatPrice(boxCost(unitPrice, n))}</>}</small></button>)}
             </div>
           </div>
           <div className="purchase-row">
@@ -425,7 +429,7 @@ function ProductDetail({ product, onSelect, onQuote }: { product: Product; onSel
             </button>
           </div>
           <button className="quote-link" onClick={onQuote}>
-            {product.quoteOnly ? "Recibe una propuesta para cajas y formato profesional" : "¿Necesitas más de 12 cajas? Solicita una cotización personalizada"} <Icon name="arrow" />
+            {product.quoteOnly ? "Recibe una propuesta para cajas y formato profesional" : "¿Necesitas más de 24 cajas? Solicita una cotización personalizada"} <Icon name="arrow" />
           </button>
           <p className="vat">{product.quoteOnly ? "Precio según campaña y volumen" : `Total estimado ${formatPrice(total)} sin IVA (${product.formats[0].vat})`} · Plazo habitual 24/48h</p>
           <div className="detail__benefits">
@@ -458,7 +462,7 @@ type OrderItem = { product: Product; quantity: number; format: Format; pack: num
 
 function QuoteModal({ open, onClose, items }: { open: boolean; onClose: () => void; items: OrderItem[] }) {
   const [sent, setSent] = useState(false);
-  const lineTotal = (item: OrderItem) => item.format.price * item.pack * item.quantity * (item.pack === 12 ? 0.86 : 0.93);
+  const lineTotal = (item: OrderItem) => boxCost(item.format.price, item.pack) * item.quantity;
   const total = items.reduce((sum, item) => sum + lineTotal(item), 0);
   useEffect(() => {
     if (open) setSent(false);
