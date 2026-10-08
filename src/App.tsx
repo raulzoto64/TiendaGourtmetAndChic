@@ -363,7 +363,7 @@ function Home({ onSelect, onQuote }: { onSelect: (product: Product) => void; onQ
 
       <section className="offer section">
         <div><p className="eyebrow">Oferta primera compra</p><h2>Foodie Box Chef</h2><p>6 productos esenciales para llevar textura, aroma y profundidad a cada servicio.</p></div>
-        <div className="offer__price"><span>Precio profesional</span><del>261,34 €</del><strong>235,21 €</strong><small>IVA no incluido · envío seguro</small></div>
+        <div className="offer__price"><span>Precio por caja surtida</span><del>261,34 €</del><strong>235,21 €</strong><small>6 productos · IVA no incluido · envío seguro</small></div>
         <button className="button button--dark" onClick={onQuote}>Solicitar Foodie Box <Icon name="arrow" /></button>
       </section>
     </main>
@@ -506,12 +506,16 @@ export default function App() {
     setOrder([{ product: item, quantity, format, pack }]);
     setQuote(true);
   };
+  const openQuote = () => {
+    setOrder([]);
+    setQuote(true);
+  };
   return (
     <>
       <Header onContact={() => setQuote(true)} />
       {product
-        ? <ProductDetail product={product} onSelect={select} onQuote={() => setQuote(true)} />
-        : <Home onSelect={(p) => select(p)} onQuote={() => setQuote(true)} />}
+        ? <ProductDetail product={product} onSelect={select} onQuote={openQuote} />
+        : <Home onSelect={(p) => select(p)} onQuote={openQuote} />}
       <Footer />
       <QuoteModal open={quote} onClose={() => setQuote(false)} items={order} />
     </>
