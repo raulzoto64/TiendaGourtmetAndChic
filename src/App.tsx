@@ -34,7 +34,7 @@ const products: Product[] = [
   {
     id: "aceite-de-trufa",
     name: "Aceite de trufa",
-    short: "AOVE Empeltre infusionado con ajo",
+    short: "AOVE Empeltre infusionado con ajo y trufa",
     image: "/assets/catalog/aceite-trufa.jpg",
     category: "Despensa",
     formats: [
@@ -42,8 +42,8 @@ const products: Product[] = [
       { label: "500 ml", price: 33.23, vat: "4%" },
     ],
     description:
-      "Aceite de oliva virgen extra Empeltre, cosechado a mano e infusionado lentamente con aromas naturales. Versátil en sala y cocina.",
-    details: ["AOVE variedad Empeltre", "Aroma natural", "Hecho a mano"],
+      "Aceite de oliva virgen extra Empeltre, cosechado a mano e infusionado lentamente con ajo, trufa y aromas naturales. Versátil en sala y cocina.",
+    details: ["AOVE variedad Empeltre", "Ajo y trufa", "Hecho a mano"],
   },
   {
     id: "sal-de-trufa",
@@ -57,7 +57,7 @@ const products: Product[] = [
       { label: "250 g", price: 35.53, vat: "10%" },
     ],
     description:
-      "Salmuera de manantial de Naval, en los Pirineos aragoneses, cocinada con trufa negra entera molida. Intensidad real, sin atajos.",
+      "Salmuera de manantial de Naval, en los Pirineos aragoneses, cocinada con trufa negra entera molida (50% T. melanosporum, 50% T. aestivum). Intensidad real, sin atajos, en pequeños lotes de pueblos de Aragón con riesgo de despoblación.",
     details: ["8% de trufa negra", "Sin conservantes", "Pequeños lotes"],
   },
   {
@@ -86,8 +86,8 @@ const products: Product[] = [
       { label: "3 kg", price: 99.84, vat: "4%" },
     ],
     description:
-      "Queso de oveja semicurado de Teruel, madurado a 1.200 metros e integrado con esferificaciones de trufa negra.",
-    details: ["Leche de oveja", "Madurado en Teruel", "Conservar refrigerado"],
+      "Queso de oveja semicurado de Teruel, madurado a 1.200 metros e integrado con esferificaciones de trufa negra. Elaborado en pequeños lotes, junto a productores de pueblos de Aragón con riesgo de despoblación.",
+    details: ["Leche de oveja", "Madurado en Teruel", "Pequeños lotes"],
   },
   {
     id: "truffo",
@@ -112,13 +112,13 @@ const products: Product[] = [
     category: "Trufa fresca",
     badge: "Producto de temporada",
     formats: [
-      { label: "50 g", price: 0, vat: "10%" },
       { label: "100 g", price: 0, vat: "10%" },
+      { label: "250 g", price: 0, vat: "10%" },
       { label: "500 g", price: 0, vat: "10%" },
     ],
     description:
-      "Piezas frescas seleccionadas una a una en Aragón y enviadas en frío en su punto óptimo de maduración. Precio y disponibilidad según mercado diario.",
-    details: ["Selección manual", "Envío refrigerado 24/48 h", "Trazabilidad de origen"],
+      "Piezas frescas seleccionadas en campo, una a una, en Aragón y enviadas en frío en su punto óptimo de maduración. Precio y disponibilidad según mercado diario.",
+    details: ["Selección en campo", "Envío refrigerado 48/72 h", "Trazabilidad de origen"],
     quoteOnly: true,
   },
   {
@@ -186,7 +186,7 @@ const formatPrice = (value: number) =>
 const PACKS = [6, 12, 24];
 const boxDiscount = (units: number) => (units >= 12 ? 0.86 : 0.93);
 const boxCost = (unitPrice: number, units: number) => unitPrice * units * boxDiscount(units);
-const boxLabel = (units: number) => (units === 6 ? "−7% profesional" : "−14% mayorista");
+const boxLabel = (units: number) => (units === 6 ? "Ahorro 7%" : "Ahorro 14%");
 
 function Icon({ name }: { name: "bag" | "arrow" | "menu" | "close" | "check" }) {
   const paths = {
@@ -231,7 +231,7 @@ function Header({ onContact }: { onContact: () => void }) {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <div className="announcement">Envío nacional 24/48h · Atención profesional personalizada</div>
+      <div className="announcement">Envío nacional 48/72h · Atención profesional personalizada</div>
       <header className="header">
         <Logo />
         <nav className={open ? "nav nav--open" : "nav"}>
@@ -302,7 +302,7 @@ function Home({ onSelect, onQuote }: { onSelect: (product: Product) => void; onQ
         <div className="hero__trust">
           <span><b>15+</b> años de experiencia</span>
           <span><b>100%</b> origen español</span>
-          <span><b>48h</b> envío refrigerado</span>
+          <span><b>48/72h</b> envío refrigerado</span>
         </div>
       </section>
 
@@ -312,7 +312,7 @@ function Home({ onSelect, onQuote }: { onSelect: (product: Product) => void; onQ
           <h2>La trufa transforma platos en experiencias.</h2>
         </div>
         <div className="intro__copy">
-          <p>Trabajamos en pequeños lotes, junto a productores y artesanos de pueblos de Aragón. Sin añadidos innecesarios. Solo materia prima, oficio y el saber hacer heredado durante generaciones.</p>
+          <p>Trabajamos en pequeños lotes, junto a productores y artesanos de pueblos de Aragón con riesgo de despoblación. Sin añadidos innecesarios. Solo materia prima, oficio y el saber hacer heredado durante generaciones.</p>
           <a href="#productos">Conoce nuestros elaborados <Icon name="arrow" /></a>
         </div>
       </section>
@@ -336,7 +336,7 @@ function Home({ onSelect, onQuote }: { onSelect: (product: Product) => void; onQ
         <div className="fresh__top">
           <p className="eyebrow eyebrow--gold">Calendario de campaña</p>
           <h2>Cada trufa,<br />en su momento.</h2>
-          <p>Seleccionamos las mejores piezas en su punto óptimo de maduración. Consulta disponibilidad y precio diario.</p>
+          <p>Seleccionamos en campo las mejores piezas en su punto óptimo de maduración. Consulta disponibilidad y precio diario.</p>
           <button className="button button--light" onClick={onQuote}>Consultar trufa fresca <Icon name="arrow" /></button>
         </div>
         <div className="season-grid">
@@ -428,10 +428,12 @@ function ProductDetail({ product, onSelect, onQuote }: { product: Product; onSel
               {product.quoteOnly ? "Solicitar precio y disponibilidad" : "Contactar para hacer pedido"} <Icon name="arrow" />
             </button>
           </div>
-          <button className="quote-link" onClick={onQuote}>
-            {product.quoteOnly ? "Recibe una propuesta para cajas y formato profesional" : "¿Necesitas más de 24 cajas? Solicita una cotización personalizada"} <Icon name="arrow" />
-          </button>
-          <p className="vat">{product.quoteOnly ? "Precio según campaña y volumen" : `Total estimado ${formatPrice(total)} sin IVA (${product.formats[0].vat})`} · Plazo habitual 24/48h</p>
+          {product.quoteOnly && (
+            <button className="quote-link" onClick={onQuote}>
+              Recibe una propuesta para cajas y formato profesional <Icon name="arrow" />
+            </button>
+          )}
+          <p className="vat">{product.quoteOnly ? "Precio según campaña y volumen" : `Total estimado ${formatPrice(total)} sin IVA (${product.formats[0].vat})`} · Plazo habitual 48/72h</p>
           <div className="detail__benefits">
             <span><b>Origen garantizado</b><small>Aragón, España</small></span>
             <span><b>Envío seguro</b><small>Embalaje profesional</small></span>
