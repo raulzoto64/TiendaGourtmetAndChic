@@ -371,7 +371,6 @@ function Home({ onSelect, onQuote }: { onSelect: (product: Product) => void; onQ
 }
 
 function ProductDetail({ product, onSelect, onQuote }: { product: Product; onSelect: (p: Product, quantity: number, format: Format, pack: number) => void; onQuote: () => void }) {
-  const [format, setFormat] = useState(product.formats[0]);
   const [pack, setPack] = useState(6);
   const [quantity, setQuantity] = useState(1);
   const [activeImage, setActiveImage] = useState(product.image);
@@ -379,12 +378,10 @@ function ProductDetail({ product, onSelect, onQuote }: { product: Product; onSel
     ? [product.image, "/assets/trufas-corte.jpg", "/assets/trufas-textura.jpeg"]
     : [product.image, "/assets/aceite-trufa.jpg", "/assets/carpaccio-trufa.jpg"];
   useEffect(() => {
-    setFormat(product.formats[0]);
     setPack(6);
     setQuantity(1);
     setActiveImage(product.image);
   }, [product]);
-  const total = format.price * pack * quantity * (pack >= 12 ? 0.86 : pack >= 6 ? 0.93 : 1);
   return (
     <main className="detail">
       <div className="breadcrumbs"><button onClick={() => goToSection("#productos")}>Tienda</button><span>/</span><span>{product.name}</span></div>
@@ -413,29 +410,21 @@ function ProductDetail({ product, onSelect, onQuote }: { product: Product; onSel
           <p className="detail__short">{product.short}</p>
           <p className="detail__description">{product.description}</p>
           <div className="option-group">
-            <label>Formato</label>
-            <div className="option-row">{product.formats.map((item) => <button className={format.label === item.label ? "active" : ""} onClick={() => setFormat(item)} key={item.label}><span>{item.label}</span><b>{product.quoteOnly ? "Precio diario" : <>{item.was && <del>{formatPrice(item.was)}</del>}{formatPrice(item.price)}</>}</b></button>)}</div>
-          </div>
-          <div className="option-group">
-            <label>Presentación</label>
+            <label>Cajas</label>
             <div className="pack-row">
               {[6, 12].map((n) => <button className={pack === n ? "active" : ""} onClick={() => setPack(n)} key={n}><b>{`Caja de ${n}`}</b><small>{n === 6 ? "−7% profesional" : "−14% mayorista"}</small></button>)}
             </div>
           </div>
-          {product.quoteOnly ? (
-            <button className="button button--red purchase-button quote-button" onClick={onQuote}>
-              Solicitar precio y disponibilidad <Icon name="arrow" />
+          <div className="purchase-row">
+            <div className="quantity"><button onClick={() => setQuantity(Math.max(1, quantity - 1))}>−</button><span>{quantity}</span><button onClick={() => setQuantity(quantity + 1)}>+</button></div>
+            <button className="button button--red purchase-button" onClick={() => onSelect(product, quantity, product.formats[0], pack)}>
+              {product.quoteOnly ? "Solicitar precio y disponibilidad" : "Contactar para hacer pedido"} <Icon name="arrow" />
             </button>
-          ) : (
-            <div className="purchase-row">
-              <div className="quantity"><button onClick={() => setQuantity(Math.max(1, quantity - 1))}>−</button><span>{quantity}</span><button onClick={() => setQuantity(quantity + 1)}>+</button></div>
-              <button className="button button--red purchase-button" onClick={() => onSelect(product, quantity, format, pack)}>Contactar para hacer pedido <Icon name="arrow" /></button>
-            </div>
-          )}
+          </div>
           <button className="quote-link" onClick={onQuote}>
             {product.quoteOnly ? "Recibe una propuesta para cajas y formato profesional" : "¿Necesitas más de 12 cajas? Solicita una cotización personalizada"} <Icon name="arrow" />
           </button>
-          <p className="vat">{product.quoteOnly ? "Precio según campaña y volumen" : `Total estimado ${formatPrice(total)} sin IVA (${format.vat})`} · Plazo habitual 24/48h</p>
+          <p className="vat">{product.quoteOnly ? "Precio según campaña y volumen" : "Precio por caja a consultar"} · Plazo habitual 24/48h</p>
           <div className="detail__benefits">
             <span><b>Origen garantizado</b><small>Aragón, España</small></span>
             <span><b>Envío seguro</b><small>Embalaje profesional</small></span>
@@ -466,7 +455,6 @@ type OrderItem = { product: Product; quantity: number; format: Format; pack: num
 
 function QuoteModal({ open, onClose, items }: { open: boolean; onClose: () => void; items: OrderItem[] }) {
   const [sent, setSent] = useState(false);
-  const total = items.reduce((sum, item) => sum + item.format.price * item.quantity * item.pack, 0);
   useEffect(() => {
     if (open) setSent(false);
   }, [open]);
@@ -476,9 +464,9 @@ function QuoteModal({ open, onClose, items }: { open: boolean; onClose: () => vo
     {!sent ? <><p className="eyebrow">Atención personalizada</p><h2>Contactar para hacer pedido</h2><p>Déjanos tus datos y te contactamos de inmediato con disponibilidad, portes e IVA.</p>
       <form onSubmit={(e) => { e.preventDefault(); setSent(true); }}>
         {items.length > 0 && <div className="modal__order">
-          <p><span>Tu pedido</span><b>{items.length} {items.length === 1 ? "artículo" : "artículos"}</b></p>
-          {items.map((item, i) => <p key={`${item.product.id}-${i}`}><span>{item.product.name} · {item.format.label} · {item.quantity} × {`caja ${item.pack}`}</span><b>{formatPrice(item.format.price * item.quantity * item.pack)}</b></p>)}
-          <small>Subtotal sin IVA · {formatPrice(total)}</small>
+          <p><span>Tu solicitud</span><b>{items.length} {items.length === 1 ? "producto" : "productos"}</b></p>
+          {items.map((item, i) => <p key={`${item.product.id}-${i}`}><span>{item.product.name} · {`Caja de ${item.pack}`}</span><b>{item.quantity} {item.quantity === 1 ? "caja" : "cajas"}</b></p>)}
+          <small>Precio por caja a consultar · te confirmamos disponibilidad y portes</small>
         </div>}
         <div className="modal__fields">
           <label>Correo electrónico<input required type="email" placeholder="nombre@correo.com" /></label>
