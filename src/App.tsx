@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-type Format = { label: string; price: number; vat: string };
+type Format = { label: string; price: number; vat: string; was?: number };
 type Product = {
   id: string;
   name: string;
@@ -23,9 +23,9 @@ const products: Product[] = [
     category: "Alta cocina",
     badge: "ANUGA Top Innovation",
     formats: [
-      { label: "50 g", price: 18.17, vat: "10%" },
-      { label: "100 g · refrigerado", price: 30, vat: "10%" },
-      { label: "200 g", price: 44.11, vat: "10%" },
+      { label: "50 g", price: 14.88, vat: "10%", was: 18.17 },
+      { label: "100 g · refrigerado", price: 15, vat: "10%", was: 30 },
+      { label: "200 g", price: 38.99, vat: "10%", was: 44.11 },
     ],
     description:
       "Esferificaciones de jugo de trufa negra con la textura, salinidad y color del caviar. Un acabado preciso para platos que buscan profundidad y sorpresa.",
@@ -258,6 +258,7 @@ function ProductCard({ product, onSelect }: { product: Product; onSelect: (produ
     <article className="product-card">
       <button className="product-card__image" onClick={open}>
         {product.badge && <span className="badge">{product.badge}</span>}
+        {product.formats.some((item) => item.was) && <span className="badge badge--offer">Oferta</span>}
         <img src={product.image} alt={product.name} />
         <span className="image-cta">Ver producto <Icon name="arrow" /></span>
       </button>
@@ -266,7 +267,7 @@ function ProductCard({ product, onSelect }: { product: Product; onSelect: (produ
         <button className="product-title" onClick={open}>{product.name}</button>
         <span>{product.short}</span>
         <div className="product-card__footer">
-          <strong>{product.quoteOnly ? "Consultar disponibilidad" : `Desde ${formatPrice(product.formats[0].price)}`}</strong>
+          <strong>{product.quoteOnly ? "Consultar disponibilidad" : <>{product.formats[0].was && <del>{formatPrice(product.formats[0].was)}</del>}Desde {formatPrice(product.formats[0].price)}</>}</strong>
           <button className="round-button" onClick={() => product.quoteOnly ? open() : onSelect(product)} aria-label={`Contactar por ${product.name}`}>
             {product.quoteOnly ? "→" : "+"}
           </button>
@@ -371,7 +372,7 @@ function Home({ onSelect, onQuote }: { onSelect: (product: Product) => void; onQ
 
 function ProductDetail({ product, onSelect, onQuote }: { product: Product; onSelect: (p: Product, quantity: number, format: Format, pack: number) => void; onQuote: () => void }) {
   const [format, setFormat] = useState(product.formats[0]);
-  const [pack, setPack] = useState(1);
+  const [pack, setPack] = useState(6);
   const [quantity, setQuantity] = useState(1);
   const [activeImage, setActiveImage] = useState(product.image);
   const gallery = product.category === "Trufa fresca"
@@ -379,7 +380,7 @@ function ProductDetail({ product, onSelect, onQuote }: { product: Product; onSel
     : [product.image, "/assets/aceite-trufa.jpg", "/assets/carpaccio-trufa.jpg"];
   useEffect(() => {
     setFormat(product.formats[0]);
-    setPack(1);
+    setPack(6);
     setQuantity(1);
     setActiveImage(product.image);
   }, [product]);
@@ -390,6 +391,7 @@ function ProductDetail({ product, onSelect, onQuote }: { product: Product; onSel
       <section className="detail__top">
         <div className="detail__gallery">
           {product.badge && <span className="badge">{product.badge}</span>}
+          {product.formats.some((item) => item.was) && <span className="badge badge--offer">Oferta</span>}
           <img src={activeImage} alt={product.name} />
           <div className="gallery-thumbs">
             {gallery.map((image, index) => (
@@ -412,12 +414,12 @@ function ProductDetail({ product, onSelect, onQuote }: { product: Product; onSel
           <p className="detail__description">{product.description}</p>
           <div className="option-group">
             <label>Formato</label>
-            <div className="option-row">{product.formats.map((item) => <button className={format.label === item.label ? "active" : ""} onClick={() => setFormat(item)} key={item.label}><span>{item.label}</span><b>{product.quoteOnly ? "Precio diario" : formatPrice(item.price)}</b></button>)}</div>
+            <div className="option-row">{product.formats.map((item) => <button className={format.label === item.label ? "active" : ""} onClick={() => setFormat(item)} key={item.label}><span>{item.label}</span><b>{product.quoteOnly ? "Precio diario" : <>{item.was && <del>{formatPrice(item.was)}</del>}{formatPrice(item.price)}</>}</b></button>)}</div>
           </div>
           <div className="option-group">
-            <label>Unidad de compra</label>
+            <label>Presentación</label>
             <div className="pack-row">
-              {[1, 6, 12].map((n) => <button className={pack === n ? "active" : ""} onClick={() => setPack(n)} key={n}><b>{n === 1 ? "Unidad" : `Caja de ${n}`}</b><small>{n === 6 ? "−7% profesional" : n === 12 ? "−14% mayorista" : "Compra individual"}</small></button>)}
+              {[6, 12].map((n) => <button className={pack === n ? "active" : ""} onClick={() => setPack(n)} key={n}><b>{`Caja de ${n}`}</b><small>{n === 6 ? "−7% profesional" : "−14% mayorista"}</small></button>)}
             </div>
           </div>
           {product.quoteOnly ? (
@@ -431,7 +433,7 @@ function ProductDetail({ product, onSelect, onQuote }: { product: Product; onSel
             </div>
           )}
           <button className="quote-link" onClick={onQuote}>
-            {product.quoteOnly ? "Recibe una propuesta para compra por unidad o cajas" : "¿Necesitas más de 12 cajas? Solicita una cotización personalizada"} <Icon name="arrow" />
+            {product.quoteOnly ? "Recibe una propuesta para cajas y formato profesional" : "¿Necesitas más de 12 cajas? Solicita una cotización personalizada"} <Icon name="arrow" />
           </button>
           <p className="vat">{product.quoteOnly ? "Precio según campaña y volumen" : `Total estimado ${formatPrice(total)} sin IVA (${format.vat})`} · Plazo habitual 24/48h</p>
           <div className="detail__benefits">
@@ -454,7 +456,7 @@ function ProductDetail({ product, onSelect, onQuote }: { product: Product; onSel
       )}
       <section className="related section">
         <div className="section-head"><div><p className="eyebrow">También te puede interesar</p><h2>Completa tu selección</h2></div></div>
-        <div className="product-grid product-grid--three">{products.filter((p) => p.id !== product.id).slice(0, 3).map((p) => <ProductCard product={p} onSelect={(item) => onSelect(item, 1, item.formats[0], 1)} key={p.id} />)}</div>
+        <div className="product-grid product-grid--three">{products.filter((p) => p.id !== product.id).slice(0, 3).map((p) => <ProductCard product={p} onSelect={(item) => onSelect(item, 1, item.formats[0], 6)} key={p.id} />)}</div>
       </section>
     </main>
   );
@@ -475,7 +477,7 @@ function QuoteModal({ open, onClose, items }: { open: boolean; onClose: () => vo
       <form onSubmit={(e) => { e.preventDefault(); setSent(true); }}>
         {items.length > 0 && <div className="modal__order">
           <p><span>Tu pedido</span><b>{items.length} {items.length === 1 ? "artículo" : "artículos"}</b></p>
-          {items.map((item, i) => <p key={`${item.product.id}-${i}`}><span>{item.product.name} · {item.format.label} · {item.quantity} × {item.pack === 1 ? "unidad" : `caja ${item.pack}`}</span><b>{formatPrice(item.format.price * item.quantity * item.pack)}</b></p>)}
+          {items.map((item, i) => <p key={`${item.product.id}-${i}`}><span>{item.product.name} · {item.format.label} · {item.quantity} × {`caja ${item.pack}`}</span><b>{formatPrice(item.format.price * item.quantity * item.pack)}</b></p>)}
           <small>Subtotal sin IVA · {formatPrice(total)}</small>
         </div>}
         <div className="modal__fields">
@@ -507,7 +509,7 @@ export default function App() {
     return () => removeEventListener("popstate", update);
   }, []);
   const product = useMemo(() => products.find((p) => path.endsWith(p.id)), [path]);
-  const select = (item: Product, quantity = 1, format = item.formats[0], pack = 1) => {
+  const select = (item: Product, quantity = 1, format = item.formats[0], pack = 6) => {
     setOrder([{ product: item, quantity, format, pack }]);
     setQuote(true);
   };

@@ -81,6 +81,7 @@ h1, h2, h3 { font-family: "Barlow Condensed"; text-transform: uppercase; margin:
 .product-card__image img { height: 100%; object-fit: cover; transition: transform .5s ease; }
 .product-card:hover .product-card__image img { transform: scale(1.04); }
 .badge { position: absolute; z-index: 1; top: 1rem; left: 1rem; background: var(--red); color: white; padding: .45rem .65rem; font-size: .61rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
+.badge--offer { top: 3.6rem; background: var(--ink); }
 .image-cta { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(31,27,27,.9); color: white; padding: 1rem 1.2rem; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; letter-spacing: .1em; font-size: .65rem; transform: translateY(100%); transition: transform .25s; }
 .product-card:hover .image-cta { transform: translateY(0); }
 .product-card__body { padding: 1.35rem; }
@@ -129,9 +130,9 @@ h1, h2, h3 { font-family: "Barlow Condensed"; text-transform: uppercase; margin:
 .breadcrumbs button { background: transparent; padding: 0; text-decoration: underline; }
 .detail__top { display: grid; grid-template-columns: 1.05fr .95fr; min-height: 46rem; border-bottom: 1px solid var(--line); }
 .detail__gallery { background: #e6e1db; position: relative; padding: clamp(2rem, 5vw, 5rem); display: grid; place-items: center; }
-.detail__gallery img { height: 34rem; object-fit: contain; mix-blend-mode: multiply; }
+.detail__gallery > img { width: auto; max-width: 100%; height: auto; max-height: 34rem; object-fit: contain; }
 .gallery-thumbs { position: absolute; right: 1.5rem; bottom: 1.5rem; display: flex; gap: .5rem; }
-.gallery-thumbs button { width: 3.8rem; height: 3.8rem; background: var(--paper); border: 1px solid var(--line); padding: .2rem; }
+.gallery-thumbs button { width: 3.8rem; height: 3.8rem; flex: 0 0 auto; overflow: hidden; background: var(--paper); border: 1px solid var(--line); padding: .2rem; }
 .gallery-thumbs button.active { border: 2px solid var(--red); }
 .gallery-thumbs img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: normal; }
 .gallery-note { position: absolute; left: 2rem; bottom: 1.5rem; display: flex; gap: .8rem; font-size: .65rem; text-transform: uppercase; letter-spacing: .1em; }
@@ -144,11 +145,14 @@ h1, h2, h3 { font-family: "Barlow Condensed"; text-transform: uppercase; margin:
 .option-group { margin-top: 1.8rem; }
 .option-group > label { display: block; font-size: .69rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: .7rem; }
 .option-row, .pack-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: .45rem; }
+.pack-row { grid-template-columns: repeat(2, 1fr); }
 .option-row button, .pack-row button { min-height: 4rem; text-align: left; background: transparent; border: 1px solid var(--line); padding: .75rem; }
 .option-row button.active, .pack-row button.active { border: 2px solid var(--red); background: #fff8f7; }
 .option-row span, .option-row b, .pack-row b, .pack-row small { display: block; }
 .option-row span, .pack-row small { color: var(--muted); font-size: .68rem; }
 .option-row b { margin-top: .25rem; font-size: .8rem; }
+.option-row b del { color: var(--muted); font-weight: 400; margin-right: .4rem; }
+.product-card__footer strong del { color: var(--muted); font-weight: 400; font-size: .75rem; margin-right: .4rem; }
 .pack-row b { font-size: .78rem; }
 .pack-row small { margin-top: .3rem; }
 .purchase-row { display: grid; grid-template-columns: 7rem 1fr; gap: .5rem; margin-top: 1.8rem; }
@@ -273,13 +277,15 @@ h1, h2, h3 { font-family: "Barlow Condensed"; text-transform: uppercase; margin:
   .offer h2 { font-size: 2.8rem; }
   .story h2 { font-size: 2.8rem; }
   .kintsugi blockquote { font-size: 1.9rem; }
-  .detail__gallery { min-height: 25rem; padding: 1.5rem; }
-  .detail__gallery img { height: 22rem; }
-  .gallery-thumbs { right: 1rem; bottom: 3.5rem; }
-  .gallery-thumbs button { width: 3.2rem; height: 3.2rem; }
+  .detail__gallery { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; min-height: 0; padding: 1.75rem 1.25rem 1.5rem; }
+  .detail__gallery > img { max-height: 15rem; }
+  .gallery-thumbs { position: static; width: 100%; justify-content: center; }
+  .gallery-thumbs button { width: 3.4rem; height: 3.4rem; }
+  .gallery-note { display: none; }
   .detail__purchase { padding: 3rem 1.25rem; }
   .detail__purchase h1 { font-size: clamp(2.4rem, 11vw, 3rem); }
-  .option-row, .pack-row { grid-template-columns: 1fr; }
+  .option-row { grid-template-columns: 1fr; }
+  .pack-row { grid-template-columns: repeat(2, 1fr); }
   .purchase-row { grid-template-columns: 1fr; }
   .quantity { height: 3rem; }
   .detail__benefits { grid-template-columns: 1fr; }
