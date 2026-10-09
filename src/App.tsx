@@ -117,7 +117,7 @@ const products: Product[] = [
       { label: "500 g", price: 0, vat: "10%" },
     ],
     description:
-      "Piezas frescas seleccionadas en campo, una a una, en Aragón y enviadas en frío en su punto óptimo de maduración. Precio y disponibilidad según mercado diario.",
+      "Piezas frescas seleccionadas en campo, una a una, en Aragón y enviadas en frío en su punto óptimo de maduración. Disponibilidad según mercado diario.",
     details: ["Selección en campo", "Envío refrigerado 48/72 h", "Trazabilidad de origen"],
     quoteOnly: true,
   },
@@ -180,12 +180,7 @@ const products: Product[] = [
   },
 ];
 
-const formatPrice = (value: number) =>
-  new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR" }).format(value);
-
 const PACKS = [6, 12, 24];
-const boxDiscount = (units: number) => (units >= 12 ? 0.86 : 0.93);
-const boxCost = (unitPrice: number, units: number) => unitPrice * units * boxDiscount(units);
 const boxLabel = (units: number) => (units === 6 ? "Ahorro 7%" : "Ahorro 14%");
 
 function Icon({ name }: { name: "bag" | "arrow" | "menu" | "close" | "check" }) {
@@ -263,7 +258,6 @@ function ProductCard({ product, onSelect }: { product: Product; onSelect: (produ
     <article className="product-card">
       <button className="product-card__image" onClick={open}>
         {product.badge && <span className="badge">{product.badge}</span>}
-        {product.formats.some((item) => item.was) && <span className="badge badge--offer">Oferta</span>}
         <img src={product.image} alt={product.name} />
         <span className="image-cta">Ver producto <Icon name="arrow" /></span>
       </button>
@@ -272,7 +266,7 @@ function ProductCard({ product, onSelect }: { product: Product; onSelect: (produ
         <button className="product-title" onClick={open}>{product.name}</button>
         <span>{product.short}</span>
         <div className="product-card__footer">
-          <strong>{product.quoteOnly ? "Consultar disponibilidad" : <>{product.formats[0].was && <del>{formatPrice(boxCost(product.formats[0].was, 6))}</del>}Cajas de 6 a 24 · desde {formatPrice(boxCost(product.formats[0].price, 6))}</>}</strong>
+          <strong>Venta por cajas de 6 a 24</strong>
           <button className="round-button" onClick={() => product.quoteOnly ? open() : onSelect(product)} aria-label={`Contactar por ${product.name}`}>
             {product.quoteOnly ? "→" : "+"}
           </button>
@@ -336,8 +330,8 @@ function Home({ onSelect, onQuote }: { onSelect: (product: Product) => void; onQ
         <div className="fresh__top">
           <p className="eyebrow eyebrow--gold">Calendario de campaña</p>
           <h2>Cada trufa,<br />en su momento.</h2>
-          <p>Seleccionamos en campo las mejores piezas en su punto óptimo de maduración. Consulta disponibilidad y precio diario.</p>
-          <button className="button button--light" onClick={onQuote}>Consultar trufa fresca <Icon name="arrow" /></button>
+          <p>Seleccionamos en campo las mejores piezas en su punto óptimo de maduración. Consulta disponibilidad diaria.</p>
+          <button className="button button--light" onClick={onQuote}>Contactar para hacer pedido <Icon name="arrow" /></button>
         </div>
         <div className="season-grid">
           {[
@@ -356,26 +350,26 @@ function Home({ onSelect, onQuote }: { onSelect: (product: Product) => void; onQ
         <div className="professional__content">
           <p className="eyebrow eyebrow--gold">Programa profesional</p>
           <h2>Creado para<br />diferenciarte.</h2>
-          <p>Tarifas por volumen, formatos adaptados a cocina profesional y retail, atención directa y logística refrigerada.</p>
+          <p>Formatos por caja adaptados a cocina profesional y retail, atención directa y logística refrigerada.</p>
           <ul>
             <li><Icon name="check" /><span><b>Chefs y restaurantes</b><small>Formatos grandes, regularidad y asesoramiento.</small></span></li>
             <li><Icon name="check" /><span><b>Tiendas especializadas</b><small>Cajas surtidas, exposición y reposición ágil.</small></span></li>
             <li><Icon name="check" /><span><b>Regalo corporativo</b><small>Selecciones personalizadas y presentación premium.</small></span></li>
           </ul>
-          <button className="button button--red" onClick={onQuote}>Solicitar tarifa profesional <Icon name="arrow" /></button>
+          <button className="button button--red" onClick={onQuote}>Contactar para hacer pedido <Icon name="arrow" /></button>
         </div>
       </section>
 
       <section className="offer section">
         <div><p className="eyebrow">Oferta primera compra</p><h2>Foodie Box Chef</h2><p>6 productos esenciales para llevar textura, aroma y profundidad a cada servicio.</p></div>
-        <div className="offer__price"><span>Precio por caja surtida</span><del>261,34 €</del><strong>235,21 €</strong><small>6 productos · IVA no incluido · envío seguro</small></div>
-        <button className="button button--dark" onClick={onQuote}>Solicitar Foodie Box <Icon name="arrow" /></button>
+        <div className="offer__price"><span>Caja surtida</span><strong>6 productos</strong><small>Venta por cajas · envío 48/72h</small></div>
+        <button className="button button--dark" onClick={onQuote}>Contactar para hacer pedido <Icon name="arrow" /></button>
       </section>
     </main>
   );
 }
 
-function ProductDetail({ product, onSelect, onQuote }: { product: Product; onSelect: (p: Product, quantity: number, format: Format, pack: number) => void; onQuote: () => void }) {
+function ProductDetail({ product, onSelect }: { product: Product; onSelect: (p: Product, quantity: number, format: Format, pack: number) => void }) {
   const [pack, setPack] = useState(6);
   const [quantity, setQuantity] = useState(1);
   const [activeImage, setActiveImage] = useState(product.image);
@@ -387,15 +381,12 @@ function ProductDetail({ product, onSelect, onQuote }: { product: Product; onSel
     setQuantity(1);
     setActiveImage(product.image);
   }, [product]);
-  const unitPrice = product.formats[0].price;
-  const total = boxCost(unitPrice, pack) * quantity;
   return (
     <main className="detail">
       <div className="breadcrumbs"><button onClick={() => goToSection("#productos")}>Tienda</button><span>/</span><span>{product.name}</span></div>
       <section className="detail__top">
         <div className="detail__gallery">
           {product.badge && <span className="badge">{product.badge}</span>}
-          {product.formats.some((item) => item.was) && <span className="badge badge--offer">Oferta</span>}
           <img src={activeImage} alt={product.name} />
           <div className="gallery-thumbs">
             {gallery.map((image, index) => (
@@ -419,21 +410,16 @@ function ProductDetail({ product, onSelect, onQuote }: { product: Product; onSel
           <div className="option-group">
             <label>Cajas</label>
             <div className="pack-row">
-              {PACKS.map((n) => <button className={pack === n ? "active" : ""} onClick={() => setPack(n)} key={n}><b>{`Caja de ${n}`}</b><small>{boxLabel(n)}{!product.quoteOnly && <> · {formatPrice(boxCost(unitPrice, n))}</>}</small></button>)}
+              {PACKS.map((n) => <button className={pack === n ? "active" : ""} onClick={() => setPack(n)} key={n}><b>{`Caja de ${n}`}</b><small>{boxLabel(n)}</small></button>)}
             </div>
           </div>
           <div className="purchase-row">
             <div className="quantity"><button onClick={() => setQuantity(Math.max(1, quantity - 1))}>−</button><span>{quantity}</span><button onClick={() => setQuantity(quantity + 1)}>+</button></div>
             <button className="button button--red purchase-button" onClick={() => onSelect(product, quantity, product.formats[0], pack)}>
-              {product.quoteOnly ? "Solicitar precio y disponibilidad" : "Contactar para hacer pedido"} <Icon name="arrow" />
+              Contactar para hacer pedido <Icon name="arrow" />
             </button>
           </div>
-          {product.quoteOnly && (
-            <button className="quote-link" onClick={onQuote}>
-              Recibe una propuesta para cajas y formato profesional <Icon name="arrow" />
-            </button>
-          )}
-          <p className="vat">{product.quoteOnly ? "Precio según campaña y volumen" : `Total estimado ${formatPrice(total)} sin IVA (${product.formats[0].vat})`} · Plazo habitual 48/72h</p>
+          <p className="vat">Venta por cajas · Plazo habitual 48/72h</p>
           <div className="detail__benefits">
             <span><b>Origen garantizado</b><small>Aragón, España</small></span>
             <span><b>Envío seguro</b><small>Embalaje profesional</small></span>
@@ -464,20 +450,18 @@ type OrderItem = { product: Product; quantity: number; format: Format; pack: num
 
 function QuoteModal({ open, onClose, items }: { open: boolean; onClose: () => void; items: OrderItem[] }) {
   const [sent, setSent] = useState(false);
-  const lineTotal = (item: OrderItem) => boxCost(item.format.price, item.pack) * item.quantity;
-  const total = items.reduce((sum, item) => sum + lineTotal(item), 0);
   useEffect(() => {
     if (open) setSent(false);
   }, [open]);
   if (!open) return null;
   return <div className="modal-wrap"><div className="modal">
     <button className="modal__close" onClick={onClose}><Icon name="close" /></button>
-    {!sent ? <><p className="eyebrow">Atención personalizada</p><h2>Contactar para hacer pedido</h2><p>Déjanos tus datos y te contactamos de inmediato con disponibilidad, portes e IVA.</p>
+    {!sent ? <><p className="eyebrow">Atención personalizada</p><h2>Contactar para hacer pedido</h2><p>Déjanos tus datos y te confirmamos disponibilidad de las cajas, portes e IVA.</p>
       <form onSubmit={(e) => { e.preventDefault(); setSent(true); }}>
         {items.length > 0 && <div className="modal__order">
           <p><span>Tu solicitud</span><b>{items.length} {items.length === 1 ? "producto" : "productos"}</b></p>
-          {items.map((item, i) => <p key={`${item.product.id}-${i}`}><span>{item.product.name} · {item.quantity} {item.quantity === 1 ? "caja" : "cajas"} de {item.pack}</span><b>{formatPrice(lineTotal(item))}</b></p>)}
-          {total > 0 && <small>Total estimado sin IVA · {formatPrice(total)}</small>}
+          {items.map((item, i) => <p key={`${item.product.id}-${i}`}><span>{item.product.name} · {item.quantity} {item.quantity === 1 ? "caja" : "cajas"}</span><b>{`Caja de ${item.pack}`}</b></p>)}
+          <small>Venta por cajas · confirmamos portes e IVA por WhatsApp</small>
         </div>}
         <div className="modal__fields">
           <label>Correo electrónico<input required type="email" placeholder="nombre@correo.com" /></label>
@@ -520,7 +504,7 @@ export default function App() {
     <>
       <Header onContact={() => setQuote(true)} />
       {product
-        ? <ProductDetail product={product} onSelect={select} onQuote={openQuote} />
+        ? <ProductDetail product={product} onSelect={select} />
         : <Home onSelect={(p) => select(p)} onQuote={openQuote} />}
       <Footer />
       <QuoteModal open={quote} onClose={() => setQuote(false)} items={order} />
