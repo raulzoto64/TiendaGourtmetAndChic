@@ -180,9 +180,6 @@ const products: Product[] = [
   },
 ];
 
-const PACKS = [6, 12, 24];
-const boxLabel = (units: number) => (units === 6 ? "Ahorro 7%" : "Ahorro 14%");
-
 function Icon({ name }: { name: "bag" | "arrow" | "menu" | "close" | "check" }) {
   const paths = {
     bag: <><path d="M6 8h12l1 12H5L6 8Z" /><path d="M9 9V6a3 3 0 0 1 6 0v3" /></>,
@@ -369,16 +366,12 @@ function Home({ onSelect, onQuote }: { onSelect: (product: Product) => void; onQ
   );
 }
 
-function ProductDetail({ product, onSelect }: { product: Product; onSelect: (p: Product, quantity: number, format: Format, pack: number) => void }) {
-  const [pack, setPack] = useState(6);
-  const [quantity, setQuantity] = useState(1);
+function ProductDetail({ product, onSelect }: { product: Product; onSelect: (p: Product) => void }) {
   const [activeImage, setActiveImage] = useState(product.image);
   const gallery = product.category === "Trufa fresca"
     ? [product.image, "/assets/trufas-corte.jpg", "/assets/trufas-textura.jpeg"]
     : [product.image, "/assets/aceite-trufa.jpg", "/assets/carpaccio-trufa.jpg"];
   useEffect(() => {
-    setPack(6);
-    setQuantity(1);
     setActiveImage(product.image);
   }, [product]);
   return (
@@ -407,19 +400,12 @@ function ProductDetail({ product, onSelect }: { product: Product; onSelect: (p: 
           <h1>{product.name}</h1>
           <p className="detail__short">{product.short}</p>
           <p className="detail__description">{product.description}</p>
-          <div className="option-group">
-            <label>Cajas</label>
-            <div className="pack-row">
-              {PACKS.map((n) => <button className={pack === n ? "active" : ""} onClick={() => setPack(n)} key={n}><b>{`Caja de ${n}`}</b><small>{boxLabel(n)}</small></button>)}
-            </div>
-          </div>
+          <p className="detail__boxes">Venta por cajas de 6 a 24 unidades. Envío 48/72h.</p>
           <div className="purchase-row">
-            <div className="quantity"><button onClick={() => setQuantity(Math.max(1, quantity - 1))}>−</button><span>{quantity}</span><button onClick={() => setQuantity(quantity + 1)}>+</button></div>
-            <button className="button button--red purchase-button" onClick={() => onSelect(product, quantity, product.formats[0], pack)}>
+            <button className="button button--red purchase-button" onClick={() => onSelect(product)}>
               Contactar para hacer pedido <Icon name="arrow" />
             </button>
           </div>
-          <p className="vat">Venta por cajas · Plazo habitual 48/72h</p>
           <div className="detail__benefits">
             <span><b>Origen garantizado</b><small>Aragón, España</small></span>
             <span><b>Envío seguro</b><small>Embalaje profesional</small></span>
@@ -440,13 +426,13 @@ function ProductDetail({ product, onSelect }: { product: Product; onSelect: (p: 
       )}
       <section className="related section">
         <div className="section-head"><div><p className="eyebrow">También te puede interesar</p><h2>Completa tu selección</h2></div></div>
-        <div className="product-grid product-grid--three">{products.filter((p) => p.id !== product.id).slice(0, 3).map((p) => <ProductCard product={p} onSelect={(item) => onSelect(item, 1, item.formats[0], 6)} key={p.id} />)}</div>
+        <div className="product-grid product-grid--three">{products.filter((p) => p.id !== product.id).slice(0, 3).map((p) => <ProductCard product={p} onSelect={onSelect} key={p.id} />)}</div>
       </section>
     </main>
   );
 }
 
-type OrderItem = { product: Product; quantity: number; format: Format; pack: number };
+type OrderItem = { product: Product };
 
 function QuoteModal({ open, onClose, items }: { open: boolean; onClose: () => void; items: OrderItem[] }) {
   const [sent, setSent] = useState(false);
@@ -460,8 +446,8 @@ function QuoteModal({ open, onClose, items }: { open: boolean; onClose: () => vo
       <form onSubmit={(e) => { e.preventDefault(); setSent(true); }}>
         {items.length > 0 && <div className="modal__order">
           <p><span>Tu solicitud</span><b>{items.length} {items.length === 1 ? "producto" : "productos"}</b></p>
-          {items.map((item, i) => <p key={`${item.product.id}-${i}`}><span>{item.product.name} · {item.quantity} {item.quantity === 1 ? "caja" : "cajas"}</span><b>{`Caja de ${item.pack}`}</b></p>)}
-          <small>Venta por cajas · confirmamos portes e IVA por WhatsApp</small>
+          {items.map((item, i) => <p key={`${item.product.id}-${i}`}><span>{item.product.name}</span><b>Por cajas</b></p>)}
+          <small>Venta por cajas de 6 a 24 unidades · confirmamos portes e IVA por WhatsApp</small>
         </div>}
         <div className="modal__fields">
           <label>Correo electrónico<input required type="email" placeholder="nombre@correo.com" /></label>
@@ -471,6 +457,32 @@ function QuoteModal({ open, onClose, items }: { open: boolean; onClose: () => vo
         <button className="button button--red" type="submit">Solicitar contacto <Icon name="arrow" /></button>
       </form></> :
       <div className="success"><span><Icon name="check" /></span><p className="eyebrow">Solicitud recibida</p><h2>Te contactamos ya.</h2><p>El equipo de Gourmet & Chic te escribe o llama de inmediato para cerrar el pedido.</p><button className="button button--dark" onClick={onClose}>Volver a la tienda</button></div>}
+  </div></div>;
+}
+
+function KitModal({ open, onClose, onQuote }: { open: boolean; onClose: () => void; onQuote: () => void }) {
+  const kit: [string, string][] = [
+    ["Caviar de trufa 200 g", "44,11 €"],
+    ["Aceite de trufa 500 ml", "33,23 €"],
+    ["Sal de trufa 8% 250 g", "35,53 €"],
+    ["Miel de trufa 4% 380 g", "34,69 €"],
+    ["Queso de trufa 2% 500 g", "16,64 €"],
+    ["Truffo 120 g", "97,14 €"],
+  ];
+  if (!open) return null;
+  return <div className="modal-wrap"><div className="modal modal--kit">
+    <button className="modal__close" onClick={onClose}><Icon name="close" /></button>
+    <p className="eyebrow">Oferta exclusiva · profesionales</p>
+    <h2>Todo lo que necesitas<br />para empezar.</h2>
+    <p className="kit__intro">Kit pack de muestras · Foodie Box Chef</p>
+    <p className="kit__head"><span>¿Qué incluye?</span><b>Precio unitario sin IVA</b></p>
+    <ul className="kit__list">{kit.map(([name, price]) => <li key={name}><span>{name}</span><b>{price}</b></li>)}</ul>
+    <div className="kit__total">
+      <p><span>Primera compra</span><b>−10%</b></p>
+      <p><span>Precio final de la Foodie Box Chef</span><b>235,21 €</b></p>
+    </div>
+    <div className="kit__included"><b>Incluido</b><span>Envío rápido y seguro · Soporte personalizado · Inspiración para tu cocina</span></div>
+    <button className="button button--red" onClick={onQuote}>Contactar para hacer pedido <Icon name="arrow" /></button>
   </div></div>;
 }
 
@@ -485,15 +497,42 @@ export default function App() {
   const [path, setPath] = useState(location.pathname);
   const [order, setOrder] = useState<OrderItem[]>([]);
   const [quote, setQuote] = useState(false);
+  const [kit, setKit] = useState(false);
   useEffect(() => {
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
     const update = () => setPath(location.pathname);
     addEventListener("popstate", update);
     return () => removeEventListener("popstate", update);
   }, []);
+  useEffect(() => {
+    if (sessionStorage.getItem("kitShown")) return;
+    const show = () => {
+      if (sessionStorage.getItem("kitShown")) return;
+      if (document.querySelector(".modal-wrap")) return;
+      sessionStorage.setItem("kitShown", "1");
+      setKit(true);
+    };
+    const timer = setTimeout(show, 15000);
+    const onLeave = (event: MouseEvent) => {
+      if (!event.relatedTarget && event.clientY <= 0) show();
+    };
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const current = window.scrollY;
+      if (lastY - current > 80 && current < 120) show();
+      lastY = current;
+    };
+    document.addEventListener("mouseout", onLeave);
+    addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      clearTimeout(timer);
+      document.removeEventListener("mouseout", onLeave);
+      removeEventListener("scroll", onScroll);
+    };
+  }, []);
   const product = useMemo(() => products.find((p) => path.endsWith(p.id)), [path]);
-  const select = (item: Product, quantity = 1, format = item.formats[0], pack = 6) => {
-    setOrder([{ product: item, quantity, format, pack }]);
+  const select = (item: Product) => {
+    setOrder([{ product: item }]);
     setQuote(true);
   };
   const openQuote = () => {
@@ -508,6 +547,7 @@ export default function App() {
         : <Home onSelect={(p) => select(p)} onQuote={openQuote} />}
       <Footer />
       <QuoteModal open={quote} onClose={() => setQuote(false)} items={order} />
+      <KitModal open={kit} onClose={() => setKit(false)} onQuote={() => { setKit(false); openQuote(); }} />
     </>
   );
 }

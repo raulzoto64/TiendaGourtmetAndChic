@@ -142,6 +142,7 @@ h1, h2, h3 { font-family: "Barlow Condensed"; text-transform: uppercase; margin:
 .detail__purchase h1 { font-size: clamp(4rem, 6vw, 6.5rem); }
 .detail__short { color: var(--red); font-family: "Barlow Condensed"; font-size: 1.4rem; text-transform: uppercase; font-weight: 600; margin: .75rem 0 1.5rem; }
 .detail__description { color: var(--muted); line-height: 1.7; max-width: 40rem; }
+.detail__boxes { margin: 1.2rem 0 0; padding: .85rem 1rem; background: var(--cream); border-left: 3px solid var(--gold); font-size: .78rem; letter-spacing: .04em; text-transform: uppercase; }
 .option-group { margin-top: 1.8rem; }
 .option-group > label { display: block; font-size: .69rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: .7rem; }
 .option-row, .pack-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: .45rem; }
@@ -154,7 +155,7 @@ h1, h2, h3 { font-family: "Barlow Condensed"; text-transform: uppercase; margin:
 .product-card__footer strong del { color: var(--muted); font-weight: 400; font-size: .75rem; margin-right: .4rem; }
 .pack-row b { font-size: .78rem; }
 .pack-row small { margin-top: .3rem; }
-.purchase-row { display: grid; grid-template-columns: 7rem 1fr; gap: .5rem; margin-top: 1.8rem; }
+.purchase-row { display: grid; grid-template-columns: 1fr; gap: .5rem; margin-top: 1.8rem; }
 .quantity { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); align-items: center; text-align: center; }
 .quantity button { background: transparent; font-size: 1.2rem; }
 .purchase-button { width: 100%; }
@@ -220,6 +221,20 @@ h1, h2, h3 { font-family: "Barlow Condensed"; text-transform: uppercase; margin:
 .success > span { display: grid; place-items: center; width: 3.4rem; height: 3.4rem; border-radius: 50%; background: var(--red); color: white; margin: 0 auto 1.3rem; }
 .success h2 { max-width: none; }
 .success .eyebrow { margin-bottom: .8rem; }
+.modal--kit { width: min(34rem, 100%); max-height: calc(100vh - 2.5rem); overflow-y: auto; }
+.modal--kit h2 { max-width: 18ch; }
+.kit__intro { margin: .7rem 0 1.2rem; text-transform: uppercase; letter-spacing: .1em; font-size: .68rem !important; font-weight: 700; color: var(--red) !important; }
+.kit__head { display: flex; justify-content: space-between; gap: 1rem; font-size: .66rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin: 0 0 .5rem; }
+.kit__list { list-style: none; margin: 0 0 1.1rem; padding: 0; border-top: 1px solid var(--line); }
+.kit__list li { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: .55rem 0; border-bottom: 1px solid var(--line); font-size: .8rem; }
+.kit__list li b { font-family: "Barlow Condensed"; font-size: 1.05rem; white-space: nowrap; }
+.kit__total { background: var(--cream); padding: .9rem 1rem; margin-bottom: 1rem; }
+.kit__total p { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin: 0; font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; }
+.kit__total p + p { margin-top: .5rem; padding-top: .5rem; border-top: 1px solid var(--line); }
+.kit__total b { font-family: "Barlow Condensed"; font-size: 1.1rem; color: var(--red); }
+.kit__total p + p b { font-size: 1.9rem; color: var(--ink); }
+.kit__included { display: flex; flex-direction: column; gap: .3rem; margin-bottom: 1.3rem; font-size: .76rem; color: var(--muted); }
+.kit__included b { color: var(--gold); text-transform: uppercase; letter-spacing: .14em; font-size: .64rem; }
 
 .footer { background: #161313; color: white; padding: 5rem clamp(1.5rem, 7vw, 7rem) 1.5rem; }
 .footer__main { display: grid; grid-template-columns: 1.5fr 1fr 1.2fr 1.3fr; gap: 3rem; padding-bottom: 5rem; }
