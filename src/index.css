@@ -33,7 +33,9 @@ svg { width: 1.25rem; fill: none; stroke: currentColor; stroke-width: 1.8; strok
 .nav { display: flex; align-items: center; gap: 2.2rem; }
 .nav button { background: none; padding: 1.9rem 0; font-size: .78rem; font-weight: 600; }
 .nav button:hover { color: var(--red); }
-.header__actions { display: flex; gap: .5rem; }
+.header__actions { display: flex; gap: .5rem; align-items: center; }
+.offer-banner { background: var(--red); color: white; padding: .55rem .85rem; font-size: .62rem; font-weight: 700; text-transform: uppercase; letter-spacing: .09em; white-space: nowrap; }
+.offer-banner:hover { background: var(--red-dark); }
 .cart-button { background: transparent; display: flex; align-items: center; gap: .55rem; position: relative; }
 .cart-button span { font-size: .78rem; font-weight: 600; }
 .cart-button i { position: absolute; top: -.65rem; left: .9rem; background: var(--red); color: white; width: 1.15rem; height: 1.15rem; display: grid; place-items: center; border-radius: 50%; font-size: .6rem; font-style: normal; }
@@ -266,6 +268,7 @@ h1, h2, h3 { font-family: "Barlow Condensed"; text-transform: uppercase; margin:
 @media (max-width: 600px) {
   .announcement { font-size: .55rem; }
   .header { height: 5rem; padding: 0 1rem; }
+  .offer-banner { padding: .5rem .6rem; font-size: .56rem; }
   .logo img { width: 10.5rem; height: 4rem; }
   .footer .logo img { width: 13rem; height: 4.6rem; }
   .hero { min-height: 46rem; }

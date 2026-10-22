@@ -270,7 +270,13 @@ function goToSection(selector: string) {
   }, 90)
 }
 
-function Header({ onContact }: { onContact: () => void }) {
+function Header({
+  onContact,
+  onOffer,
+}: {
+  onContact: () => void
+  onOffer: () => void
+}) {
   const [open, setOpen] = useState(false)
   return (
     <>
@@ -314,6 +320,13 @@ function Header({ onContact }: { onContact: () => void }) {
           </button>
         </nav>
         <div className="header__actions">
+          <button
+            className="offer-banner"
+            onClick={onOffer}
+            aria-label="Ver oferta especial"
+          >
+            Oferta especial
+          </button>
           <button
             className="cart-button"
             onClick={onContact}
@@ -995,9 +1008,13 @@ export default function App() {
     [path],
   )
   const openQuote = () => setQuote(true)
+  const showKit = () => {
+    sessionStorage.setItem("kitShown", "1")
+    setKit(true)
+  }
   return (
     <>
-      <Header onContact={() => setQuote(true)} />
+      <Header onContact={() => setQuote(true)} onOffer={showKit} />
       {product ? (
         <ProductDetail product={product} onSelect={openQuote} />
       ) : (
