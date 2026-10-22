@@ -21,6 +21,25 @@ type Product = {
 
 const products: Product[] = [
   {
+    id: "truffo",
+    name: "Truffo",
+    short: "La trufa reconstruida y sellada con oro",
+    image: "/assets/catalog/truffo.jpg",
+    category: "Edición singular",
+    badge: "Novedad mundial",
+    formats: [
+      { label: "10 g", price: 8.69, vat: "10%" },
+      { label: "120 g", price: 97.14, vat: "10%" },
+    ],
+    description:
+      "Tuber melanosporum reconstruida mediante un proceso único y sellada con oro de 24K. Inspirada en el Kintsugi japonés y creada para la liturgia del laminado en mesa.",
+    details: [
+      "Tuber melanosporum",
+      "Oro alimentario de 24K",
+      "Vida útil extendida",
+    ],
+  },
+  {
     id: "caviar-de-trufa",
     name: "Caviar de trufa",
     short: "Esferificaciones de Tuber melanosporum",
@@ -97,25 +116,6 @@ const products: Product[] = [
     description:
       "Queso de oveja semicurado de Teruel, madurado a 1.200 metros e integrado con esferificaciones de trufa negra. Elaborado en pequeños lotes, junto a productores de pueblos de Aragón con riesgo de despoblación.",
     details: ["Leche de oveja", "Madurado en Teruel", "Pequeños lotes"],
-  },
-  {
-    id: "truffo",
-    name: "Truffo",
-    short: "La trufa reconstruida y sellada con oro",
-    image: "/assets/catalog/truffo.jpg",
-    category: "Edición singular",
-    badge: "Novedad mundial",
-    formats: [
-      { label: "10 g", price: 8.69, vat: "10%" },
-      { label: "120 g", price: 97.14, vat: "10%" },
-    ],
-    description:
-      "Tuber melanosporum reconstruida mediante un proceso único y sellada con oro de 24K. Inspirada en el Kintsugi japonés y creada para la liturgia del laminado en mesa.",
-    details: [
-      "Tuber melanosporum",
-      "Oro alimentario de 24K",
-      "Vida útil extendida",
-    ],
   },
   {
     id: "trufa-negra-fresca",
@@ -637,18 +637,7 @@ function ProductDetail({
   onSelect: (p: Product) => void
 }) {
   const [activeImage, setActiveImage] = useState(product.image)
-  const gallery =
-    product.category === "Trufa fresca"
-      ? [
-          product.image,
-          "/recomendadas/trufas-negras-invierno-aragon-mezcla.jpg",
-          "/recomendadas/trufas-negras-invierno-aragon-extra.jpg",
-        ]
-      : [
-          product.image,
-          "/assets/WhatsApp Image 2026-10-17 at 12.14.13 PM (1).jpeg",
-          "/assets/WhatsApp Image 2026-10-17 at 12.34.44 PM.jpeg",
-        ]
+  const gallery = [product.image]
   useEffect(() => {
     setActiveImage(product.image)
   }, [product])
@@ -663,18 +652,20 @@ function ProductDetail({
         <div className="detail__gallery">
           {product.badge && <span className="badge">{product.badge}</span>}
           <img src={activeImage} alt={product.name} />
-          <div className="gallery-thumbs">
-            {gallery.map((image, index) => (
-              <button
-                className={activeImage === image ? "active" : ""}
-                onClick={() => setActiveImage(image)}
-                aria-label={`Ver imagen ${index + 1} de ${product.name}`}
-                key={image}
-              >
-                <img src={image} alt="" />
-              </button>
-            ))}
-          </div>
+          {gallery.length > 1 && (
+            <div className="gallery-thumbs">
+              {gallery.map((image, index) => (
+                <button
+                  className={activeImage === image ? "active" : ""}
+                  onClick={() => setActiveImage(image)}
+                  aria-label={`Ver imagen ${index + 1} de ${product.name}`}
+                  key={image}
+                >
+                  <img src={image} alt="" />
+                </button>
+              ))}
+            </div>
+          )}
           <div className="gallery-note">
             <span>01</span>
             <p>Fotografía de producto</p>
