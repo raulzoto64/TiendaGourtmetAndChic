@@ -119,27 +119,6 @@ const products: Product[] = [
     details: ["Leche de oveja", "Madurado en Teruel", "Pequeños lotes"],
   },
   {
-    id: "trufa-negra-fresca",
-    name: "Trufa negra fresca",
-    short: "Tuber melanosporum seleccionada en origen",
-    image: "/recomendadas/trufas-negras-invierno-aragon-primera.jpg",
-    category: "Trufa fresca",
-    badge: "Producto de temporada",
-    formats: [
-      { label: "100 g", price: 0, vat: "10%" },
-      { label: "250 g", price: 0, vat: "10%" },
-      { label: "500 g", price: 0, vat: "10%" },
-    ],
-    description:
-      "Piezas frescas seleccionadas en campo, una a una, en Aragón y enviadas en frío en su punto óptimo de maduración. Disponibilidad según mercado diario.",
-    details: [
-      "Selección en campo",
-      "Envío refrigerado 48/72 h",
-      "Trazabilidad de origen",
-    ],
-    quoteOnly: true,
-  },
-  {
     id: "carpaccio-de-trufa",
     name: "Carpaccio de trufa",
     short: "Láminas de trufa listas para emplatar",
@@ -171,18 +150,6 @@ const products: Product[] = [
     description:
       "Salsa artesana con un 7% de trufa para enriquecer arroces, carnes, pastas y fondos. Preparada en pequeños lotes y pensada para un resultado constante.",
     details: ["7% de trufa", "Pequeños lotes", "Formato retail y profesional"],
-    quoteOnly: true,
-  },
-  {
-    id: "laminador-de-trufa",
-    name: "Laminador de trufa",
-    short: "Corte preciso para el ritual en mesa",
-    image: "/recomendadas/laminador-trufa-mesa-gourmet-chic.jpg",
-    category: "Accesorios",
-    formats: [{ label: "1 unidad", price: 0, vat: "21%" }],
-    description:
-      "Laminador regulable para conseguir cortes finos, regulares y elegantes. El instrumento esencial para terminar cada plato ante el comensal.",
-    details: ["Corte regulable", "Uso profesional", "Fácil limpieza"],
     quoteOnly: true,
   },
 ]
@@ -361,7 +328,7 @@ function ProductCard({
         </button>
         <span>{product.short}</span>
         <div className="product-card__footer">
-          <strong>Venta por cajas de 4, 6 a 12</strong>
+          <strong>Venta por cajas · Envío a todo España</strong>
           <button
             className="round-button"
             onClick={() => (product.quoteOnly ? open() : onSelect(product))}
@@ -471,12 +438,10 @@ function Home({
         <div className="filters" role="tablist">
           {[
             "Todos",
-            "Trufa fresca",
             "Alta cocina",
             "Despensa",
             "Refrigerado",
             "Edición singular",
-            "Accesorios",
           ].map((item) => (
             <button
               className={filter === item ? "active" : ""}
@@ -604,7 +569,7 @@ function Home({
         <div className="offer__price">
           <span>Caja surtida</span>
           <strong>6 productos</strong>
-          <small>Cajas de 4, 6 a 12 · envío 48/72h</small>
+          <small>Venta por cajas · Envío a todo España 48/72h</small>
         </div>
         <button className="button button--dark" onClick={onQuote}>
           Contactar para hacer pedido <Icon name="arrow" />
@@ -662,8 +627,7 @@ function ProductDetail({
           <p className="detail__short">{product.short}</p>
           <p className="detail__description">{product.description}</p>
           <p className="detail__boxes">
-            Venta por cajas de 4, 6 a 12 unidades. Envío 48/72h a Málaga y toda
-            España.
+            Venta por cajas. Envío 48/72h a todo España.
           </p>
           <div className="purchase-row">
             <button
@@ -893,8 +857,8 @@ function KitModal({
         <div className="kit__included">
           <b>Incluido</b>
           <span>
-            Llamada de un agente comercial · Cajas de 4, 6 a 12 · Envío a Málaga
-            y toda España 48/72h
+            Llamada de un agente comercial · Venta por cajas · Envío a todo
+            España 48/72h
           </span>
         </div>
         <button className="button button--red" onClick={onQuote}>
