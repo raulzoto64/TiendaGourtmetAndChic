@@ -224,13 +224,11 @@ h1, h2, h3 { font-family: "Barlow Condensed"; text-transform: uppercase; margin:
 .kit__intro { margin: .7rem 0 1.2rem; text-transform: uppercase; letter-spacing: .1em; font-size: .68rem !important; font-weight: 700; color: var(--red) !important; }
 .kit__head { display: flex; justify-content: space-between; gap: 1rem; font-size: .66rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin: 0 0 .5rem; }
 .kit__list { list-style: none; margin: 0 0 1.1rem; padding: 0; border-top: 1px solid var(--line); }
-.kit__list li { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: .55rem 0; border-bottom: 1px solid var(--line); font-size: .8rem; }
-.kit__list li b { font-family: "Barlow Condensed"; font-size: 1.05rem; white-space: nowrap; }
-.kit__total { background: var(--cream); padding: .9rem 1rem; margin-bottom: 1rem; }
-.kit__total p { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin: 0; font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; }
-.kit__total p + p { margin-top: .5rem; padding-top: .5rem; border-top: 1px solid var(--line); }
-.kit__total b { font-family: "Barlow Condensed"; font-size: 1.1rem; color: var(--red); }
-.kit__total p + p b { font-size: 1.9rem; color: var(--ink); }
+.kit__list li { border-bottom: 1px solid var(--line); }
+.kit__list li button { display: flex; width: 100%; justify-content: space-between; align-items: baseline; gap: 1rem; padding: .55rem 0; font-size: .8rem; background: none; border: 0; color: inherit; cursor: pointer; text-align: left; }
+.kit__list li button:hover span { color: var(--red); }
+.kit__list li button b { font-family: "Barlow Condensed"; font-size: 1.05rem; white-space: nowrap; color: var(--muted); }
+.kit__list li button.selected b { color: var(--red); }
 .kit__included { display: flex; flex-direction: column; gap: .3rem; margin-bottom: 1.3rem; font-size: .76rem; color: var(--muted); }
 .kit__included b { color: var(--gold); text-transform: uppercase; letter-spacing: .14em; font-size: .64rem; }
 .kit__copy { margin: 0 0 1.3rem; }

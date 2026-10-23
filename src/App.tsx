@@ -799,14 +799,21 @@ function KitModal({
   onClose: () => void
   onQuote: () => void
 }) {
-  const kit: [string, string][] = [
-    ["Caviar de trufa 200 g", "44,11 €"],
-    ["Aceite de trufa 500 ml", "33,23 €"],
-    ["Sal de trufa 8% 250 g", "35,53 €"],
-    ["Miel de trufa 4% 380 g", "34,69 €"],
-    ["Queso de trufa 2% 500 g", "16,64 €"],
-    ["Truffo 120 g", "97,14 €"],
+  const kit = [
+    "Caviar de trufa 200 g",
+    "Aceite de trufa 500 ml",
+    "Sal de trufa 8% 250 g",
+    "Miel de trufa 4% 380 g",
+    "Queso de trufa 2% 500 g",
+    "Truffo 120 g",
   ]
+  const [selected, setSelected] = useState<string[]>([])
+  const toggle = (name: string) =>
+    setSelected((current) =>
+      current.includes(name)
+        ? current.filter((item) => item !== name)
+        : [...current, name],
+    )
   if (!open) return null
   return (
     <div className="modal-wrap">
@@ -828,32 +835,28 @@ function KitModal({
           Elige cualquier producto y haz tu propio pack
         </p>
         <p className="kit__copy">
-          Escoge los productos que quieras y monta tu pack personalizado.
+          Selecciona los productos que quieras y monta tu pack personalizado.
           Déjanos tus datos y un agente comercial te llamará de inmediato para
           prepararlo y enviártelo.
         </p>
         <p className="kit__head">
           <span>Elige los que quieras</span>
-          <b>Precio unitario sin IVA</b>
         </p>
         <ul className="kit__list">
-          {kit.map(([name, price]) => (
+          {kit.map((name) => (
             <li key={name}>
-              <span>{name}</span>
-              <b>{price}</b>
+              <button
+                type="button"
+                className={selected.includes(name) ? "selected" : ""}
+                onClick={() => toggle(name)}
+                aria-pressed={selected.includes(name)}
+              >
+                <span>{name}</span>
+                <b>{selected.includes(name) ? "✓" : "+"}</b>
+              </button>
             </li>
           ))}
         </ul>
-        <div className="kit__total">
-          <p>
-            <span>Primera compra</span>
-            <b>−10%</b>
-          </p>
-          <p>
-            <span>Precio final pack de ejemplo</span>
-            <b>235,21 €</b>
-          </p>
-        </div>
         <div className="kit__included">
           <b>Incluido</b>
           <span>
@@ -862,7 +865,7 @@ function KitModal({
           </span>
         </div>
         <button className="button button--red" onClick={onQuote}>
-          Quiero mi pack personalizado <Icon name="arrow" />
+          Déjanos tus datos y te llamamos <Icon name="arrow" />
         </button>
       </div>
     </div>
