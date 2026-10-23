@@ -63,7 +63,8 @@ const products: Product[] = [
     id: "aceite-de-trufa",
     name: "Aceite de trufa",
     short: "AOVE Empeltre infusionado con ajo y trufa",
-    image: "/recomendadas/aceite-de-trufa-virgen-artesano-gourmet-chic.jpg",
+    image:
+      "/recomendadas/aceite-de-trufa-virgen-artesano-100ml-gourmet-chic-03.jpg",
     category: "Despensa",
     formats: [
       { label: "125 ml", price: 12.42, vat: "4%" },
@@ -77,7 +78,7 @@ const products: Product[] = [
     id: "sal-de-trufa",
     name: "Sal de trufa 8%",
     short: "Sal de manantial y trufa negra",
-    image: "/recomendadas/sal-de-trufa-artesana-300gr-gourmet-chic.jpg",
+    image: "/assets/catalog/sal-trufa.jpg",
     category: "Despensa",
     badge: "8% trufa negra",
     formats: [
@@ -92,7 +93,7 @@ const products: Product[] = [
     id: "miel-de-trufa",
     name: "Miel de trufa 4%",
     short: "Miel de encina macerada con trufa",
-    image: "/recomendadas/miel-artesana-de-trufa-gourmet-chic-380g.jpg",
+    image: "/recomendadas/miel-artesana-de-trufa-gourmet-chic-03.jpg",
     category: "Despensa",
     formats: [
       { label: "140 g", price: 20, vat: "10%" },
@@ -170,22 +171,6 @@ const products: Product[] = [
     description:
       "Salsa artesana con un 7% de trufa para enriquecer arroces, carnes, pastas y fondos. Preparada en pequeños lotes y pensada para un resultado constante.",
     details: ["7% de trufa", "Pequeños lotes", "Formato retail y profesional"],
-    quoteOnly: true,
-  },
-  {
-    id: "aceite-de-oliva-virgen-extra",
-    name: "AOVE Empeltre",
-    short: "Aceite de oliva de cosecha aragonesa",
-    image:
-      "/recomendadas/aceite-de-oliva-virgen-extra-artesano-gourmet-chic.jpg",
-    category: "Despensa",
-    formats: [
-      { label: "250 ml", price: 0, vat: "4%" },
-      { label: "500 ml", price: 0, vat: "4%" },
-    ],
-    description:
-      "Aceite de oliva virgen extra de variedad Empeltre, cosechado a mano. La base mediterránea de nuestros elaborados y un producto excepcional por sí mismo.",
-    details: ["Variedad Empeltre", "Cosecha manual", "Origen Aragón"],
     quoteOnly: true,
   },
   {
