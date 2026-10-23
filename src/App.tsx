@@ -857,6 +857,12 @@ function KitModal({
             </li>
           ))}
         </ul>
+        <div className="kit__total">
+          <p>
+            <span>Primera compra</span>
+            <b>−10%</b>
+          </p>
+        </div>
         <div className="kit__included">
           <b>Incluido</b>
           <span>
