@@ -24,7 +24,7 @@ const products: Product[] = [
     id: "truffo",
     name: "Truffo",
     short: "La trufa reconstruida y sellada con oro",
-    image: "/assets/catalog/truffo.jpg",
+    image: "/assets/trufoo.png",
     category: "Edición singular",
     badge: "Novedad mundial",
     formats: [
@@ -64,7 +64,7 @@ const products: Product[] = [
     name: "Aceite de trufa",
     short: "AOVE Empeltre infusionado con ajo y trufa",
     image:
-      "/recomendadas/aceite-de-trufa-virgen-artesano-100ml-gourmet-chic-03.jpg",
+      "/recomendadas/aceite-de-trufa-virgen-artesano-gourmet-chic-bote.jpg",
     category: "Despensa",
     formats: [
       { label: "125 ml", price: 12.42, vat: "4%" },
@@ -866,8 +866,7 @@ function KitModal({
         <div className="kit__included">
           <b>Incluido</b>
           <span>
-            Llamada de un agente comercial · Venta por cajas · Envío a todo
-            España 48/72h
+            Llamada de un agente comercial · Envío a todo España 48/72h
           </span>
         </div>
         <button className="button button--red" onClick={onQuote}>
