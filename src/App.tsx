@@ -817,7 +817,7 @@ function QuoteModal({ open, onClose }: QuoteModalProps) {
                         onChange={(e) =>
                           setFormData((prev) => ({ ...prev, apellidos: e.target.value }))
                         }
-                      />
+                      </label>
                     </label>
                     <label>
                       Ciudad
@@ -829,8 +829,7 @@ function QuoteModal({ open, onClose }: QuoteModalProps) {
                         onChange={(e) =>
                           setFormData((prev) => ({ ...prev, ciudad: e.target.value }))
                         }
-                      />
-                    </label>
+                      </label>
                   </>
                 ) : (
                   <>
@@ -844,7 +843,7 @@ function QuoteModal({ open, onClose }: QuoteModalProps) {
                         onChange={(e) =>
                           setFormData((prev) => ({ ...prev, correo: e.target.value }))
                         }
-                      />
+                      </label>
                     </label>
                     <label>
                       Celular / WhatsApp
@@ -856,8 +855,13 @@ function QuoteModal({ open, onClose }: QuoteModalProps) {
                         onChange={(e) =>
                           setFormData((prev) => ({ ...prev, celular: e.target.value }))
                         }
-                      />
+                      </label>
                     </label>
+                    {step === 2 && (
+                      <button className="button button--ghost" onClick={() => setStep(1)}>
+                        Volver
+                      </button>
+                    )}
                   </>
                 )}
               </div>
