@@ -743,10 +743,32 @@ function QuoteModal({ open, onClose }: QuoteModalProps) {
             <form
               onSubmit={(e) => {
                 e.preventDefault()
-                setSent(true)
+                const formData = new FormData(e.target as HTMLFormElement)
+                const data = Object.fromEntries(formData.entries())
+                // Enviar a HubSpot
+                fetch(
+                  "https://api.hsforms.com/submissions/v3/integration/submit/52188274/a6c5936a-3866-4253-abf3-0e1e49eceb8c",
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: new URLSearchParams(
+                      data as Record<string, string>,
+                    ),
+                  },
+                ).then(() => setSent(true))
               }}
             >
               <div className="modal__fields">
+                <label>
+                  Nombre
+                  <input required type="text" placeholder="Tu nombre" />
+                </label>
+                <label>
+                  Apellidos
+                  <input required type="text" placeholder="Tus apellidos" />
+                </label>
                 <label>
                   Correo electrónico
                   <input
